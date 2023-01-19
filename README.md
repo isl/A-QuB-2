@@ -27,7 +27,7 @@ The current version a) implements a configuration model that allows fully config
 
 ## Requirements ##
 
-- The application communicates with the knowledge base (RDF triplestore) through the API provided by [A-QuB-2 AccessServices](https://github.com/isl/A-QuB-2-AccessServices). The URL of this API is set in the configuration's property file. 
+- The application communicates with the knowledge base (RDF triplestore) through the API provided by [A-QuB AccessServices](https://github.com/isl/A-QuB-2-AccessServices). The URL of this API is set in the configuration's property file. 
 
 ## Contact ##
 
