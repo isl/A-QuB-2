@@ -1,4 +1,4 @@
-# A-QuB-2 | A Web Application for Semantic Data Exploration
+# A-QuB-2 | A Web Application for User-Friendly Semantic Data Querying and Exploration
 
 ## System Description ##
 
