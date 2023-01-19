@@ -2,7 +2,7 @@
 
 ## System Description ##
 
-A-QuB-2 is a web application that facilitates the exploration of semantic (RDF) data by plain users. It offers a user-friendly interface that supports users in building and running complex queries step-by-step, without needing to know and write SPARQL. Its configuration model allows setting up the application for use over any knowledge base, independent of the underlying data model / ontology. 
+A-QuB-2 is a web application that facilitates the exploration of semantic (RDF) data by plain users. It offers an intuitive, user-friendly interface that supports users in building and running complex queries step-by-step, without needing to know and write SPARQL. Its configuration model allows setting up the application for use over any knowledge base, independent of the underlying data model / ontology. 
 
 The supported functionalities include:
 * Assistive query building interface that exploits the connections of the KB entities
