@@ -1,0 +1,84 @@
+<div class="section" style="padding:5px 20px;">
+
+    <div class="row">
+
+        <div class="column inside" style="width:100%">
+
+            <md-toolbar class="md-primary">
+                <div class="md-toolbar-tools">
+                    <md-icon md-font-icon="fa fa-home" style="padding-right:10px; font-size:36px;"/>
+                    <h2 class="md-flex" flex>{{headingTitle}}</h2>
+                    <md-button ng-click="toggleInfo()" class="md-icon-button" aria-label="Show Information" style="display:none">
+                        <md-icon md-font-icon="fa fa-info-circle" style="font-size:28px;">
+                            <md-tooltip md-delay="1000" md-direction="top">
+                                Information
+                            </md-tooltip>
+                    </md-button>
+                </div>
+            </md-toolbar>
+
+            <md-sidenav class="md-sidenav-right" 
+                        md-component-id="rightInfo"
+                        md-disable-backdrop 
+                        md-whiteframe="4"
+                        style="margin-top:79px;">
+
+                <md-toolbar class="md-accent">
+                    <div class="md-toolbar-tools">
+                        <md-button class="md-icon-button" aria-label="Hide Help" ng-click="toggleInfo()">
+                            <md-icon md-font-icon="fa fa-chevron-circle-right" style="font-size:24px"></md-icon>
+                        </md-button>
+
+                        <h2 class="md-flex">Information</h2>
+                        <span flex></span>
+                        <md-icon md-font-icon="fa fa-info" style="font-size:32px;"></md-icon>
+                    </div>
+                </md-toolbar>
+
+                <md-content layout-margin>
+                    <p>
+                    <div ng-include="'views/info/queryInfo.html'"></div>
+                    </p>
+
+                    <md-button ng-click="toggleInfo()" class="md-accent">
+                        Close this Sidenav
+                    </md-button>
+                </md-content>
+
+            </md-sidenav>
+
+            <md-content flex layout-padding style="overflow:visible;" layout="row">
+
+                <md-card flex ng-repeat="card in cards">
+                    <md-card-title>
+                        <md-card-title-text>
+                            <span class="md-headline">{{card.title}}</span>
+                            <span class="md-subhead" style="text-align: justify;">{{card.description}}</span>
+                            <span class="md-subhead" style="margin:auto;">
+                                <md-card-title-media>
+                                    <div class="md-media-lg">
+                                        <md-icon md-font-icon="mdi {{card.icon}}" 
+                                                 style="font-size:{{card.size}};">
+                                        </md-icon>
+                                    </div>
+                                </md-card-title-media>
+                            </span>
+                        </md-card-title-text>
+                    </md-card-title>
+                    <md-card-actions layout="row" layout-align="end center">
+                        <md-button ng-click="goToState(card.state)" ng-disabled="card.disabled">{{card.actionButtonLabel}}</md-button>
+                    </md-card-actions>
+                </md-card>
+
+
+                <!-- </div> -->
+
+
+                <!-- Use Sidenav for left menu (like you did for info on the right) -->
+
+            </md-content>
+        </div>
+
+    </div>
+
+</div>

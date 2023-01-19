@@ -1,0 +1,69 @@
+<md-dialog aria-label="Favorite Dialog">
+	<form name="favoriteForm" ng-submit="saveIntoFavorites();" ng-cloak>
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>Query Model</h2>
+				<span flex></span>
+		        <md-button class="md-icon-button" ng-click="closeFavoriteDialog();">
+			        <md-icon class="md-icon-button" 
+							 aria-label="Close dialog" 
+							 md-font-icon="fa fa-times" style="font-size:24px;">
+					</md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+
+		<md-dialog-content>
+			<div class="md-dialog-content">
+        		<div layout="row"> <!-- style="width:600px;" -->
+		      		<md-input-container>
+		        		<label for="queryModelTitleId">Title</label>
+		        		<md-icon style="font-size:25px;"></md-icon>
+		        		<input type="text" 
+		        			   name="queryModelTitleId" 
+		        			   id="queryModelTitleId" 
+		        			   ng-model="favoriteModel.title" 
+		        			   md-maxlength="100"
+		        			   required />
+		        		<div ng-messages="favoriteForm.queryModelTitleId.$error">
+							<div ng-message="required">
+								This is required
+							</div>
+							<div ng-message="md-maxlength">
+                				Please enter less than 100 characters
+              				</div>
+						</div>
+		      		</md-input-container>
+				</div>
+				
+				<div layout="row"> <!-- style="width:600px;" -->
+		      		<md-input-container>
+		        		<label for="queryModelDescriptionId">Description</label>
+		        		<md-icon style="font-size:25px;"></md-icon>
+		        		<textarea type="text" 
+		        				  id="queryModelDescriptionId" 
+		        				  name="queryModelDescriptionId" 
+		        				  ng-model="favoriteModel.description" 
+		        				  md-maxlength="500" 
+		        				  style="width:350px;" />
+		      		</md-input-container>
+				</div>
+				
+			</div>
+		</md-dialog-content>
+		
+		
+
+		<md-dialog-actions layout="row">
+			<md-button type="submit" 
+					   class="md-raised md-primary" 
+					   ng-disabled="favoriteForm.$invalid">
+				Save
+			</md-button>
+			<span flex></span>
+			<md-button class="md-raised md-primary" ng-click="closeFavoriteDialog()">
+				Cancel
+			</md-button>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

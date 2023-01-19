@@ -1,0 +1,76 @@
+<div class="section" style="padding:5px 20px;">
+
+    <div class="row">
+        <div class="column inside" style="width:100%">
+
+            <md-toolbar class="md-primary">
+                <div class="md-toolbar-tools">
+                    <h2 class="md-flex">{{headingTitle}}</h2>
+                </div>
+            </md-toolbar>
+
+            <form name="form" role="form" data-ng-submit="login()">
+
+                <md-content style="padding:8px 8px 8px 8px;">
+                    <div uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')"
+                         class='fadeAlert' close="alerts.splice($index, 1);">
+                        {{alert.msg}}
+                    </div>
+                    <div ng-class="{ 'has-error': form.username.$dirty && form.username.$error.required }">
+                        <md-input-container>
+                            <label for="username">Username</label>
+                            <input type="text" name="username" id="username" ng-model="credentials.username" required />
+                            <span ng-show="form.username.$dirty && form.username.$error.required" class="help-block">
+                                Username is required
+                            </span>
+                        </md-input-container>
+                    </div>
+                    <div ng-class="{ 'has-error': form.password.$dirty && form.password.$error.required }">
+                        <md-input-container>
+                            <label for="password">Password</label>
+                            <input type="password" name="password" id="password" ng-model="credentials.password"
+                                   required style="margin-bottom:5px;" />
+                            <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">
+                                Password is required
+                            </span>
+                        </md-input-container>
+                    </div>
+                    <!-- not used anymore 
+                    <div >
+                            <md-input-container>
+                                    <md-checkbox ng-model="multifactorAuthenticatorActive"
+                                                             aria-label="Multifactor Authenticator"
+                                             flex>
+                            Use Multifactor Authenticator
+                            </md-checkbox>
+                            </md-input-container>
+            </div>
+                    -->
+                    <div style="padding-bottom:15px">
+                        <md-button type="submit" ng-disabled="form.$invalid || vm.dataLoading"
+                                   class="md-raised md-primary" ng-change="updateUserProfile()" ng-model="userProfile">
+                            Login
+                        </md-button>
+                        <md-button ng-click="goToRegistration($event)" md-no-ink class="md-primary">
+                            Register
+                        </md-button>
+                    </div>
+
+                    <!--<div class="alert alert-info">
+                        <b>Disclaimer:</b>
+                        CMBR provides access to assets of other organisations through metadata supplied 
+                        by them in the interests of open science and under the policies and conditions of 
+                        those organisations. By using the CMBR portal the user consents to those conditions 
+                        for the benefit of access and use. The CMBR project does not accept any liability 
+                        in respect of loss, damage, injury or any other occurrence arising from the reliance 
+                        on advice, information, data or related records provided.
+                    </div>-->
+
+                </md-content>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>

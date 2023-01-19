@@ -1,0 +1,189 @@
+<md-dialog  style="width:100%; max-height:710px;">
+	<md-dialog-content style="padding-bottom:0;">
+		
+		<div id="popupContainerOnMap"></div>
+		
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>Map Options</h2>
+				<span flex></span>
+		        <md-button ng-click="toggleMapInfo()" class="md-icon-button" aria-label="Show Help">
+					<md-icon md-font-icon="fa fa-question" style="font-size:28px;">
+					<md-tooltip md-delay="1000" md-direction="top">
+						Help
+					</md-tooltip>
+		        </md-button>
+		        <md-button class="md-icon-button" ng-click="closeSelectedFromMapDialogDialog($event, currRowModel)">
+			        <md-icon class="md-icon-button" 
+							 aria-label="Close dialog" 
+							 md-font-icon="fa fa-times" style="font-size:24px;">
+					</md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		
+		<md-sidenav id="mapSidenamHelp"
+					class="md-sidenav-right" 
+					md-component-id="mapInfo"
+                	md-whiteframe="4"
+                	md-disable-backdrop
+                	style="max-width:665px; width:665px"> <!-- margin-top:64px; -->
+
+			<md-toolbar class="md-accent">
+				<div class="md-toolbar-tools">
+					<md-button class="md-icon-button" aria-label="Hide Help" ng-click="toggleMapInfo()">
+          				<md-icon md-font-icon="fa fa-chevron-circle-right" style="font-size:24px"></md-icon>
+        			</md-button>
+					
+					<h2 class="md-flex">Help</h2>
+					<span flex></span>
+					<md-icon md-font-icon="fa fa-question" style="font-size:24px;"></md-icon>
+				</div>
+			</md-toolbar>
+
+			<md-content layout-margin>
+				<p>
+					<div ng-include="'views/info/usingTheMapHelp.html'"></div>
+				</p>
+				
+				<div layout="row">
+					<md-button ng-click="toggleMapInfo()" class="md-accent">
+						Close this Sidenav
+					</md-button>
+					<span flex></span>
+				</div>
+			</md-content>
+
+		</md-sidenav>
+		
+		<md-backdrop ng-show="mapInfoIsOpen" 
+								 class="md-opaque"
+								 ng-cloak></md-backdrop>
+		
+		<div id="mapDialogMainContent"></div>
+		
+		<div layout-padding>
+			<div>
+				Please <code>use the buttons to interact with the map</code> (Zoom in/out, search toponymies, set region, etc).
+			</div>
+			<div ng-show="currRowModel.boundingBoxResultsCount > 0" class="animate-show animate-hide">
+				As soon as there are pins displayed on the map click on them to select / deselect 
+			 	<code style="color:#106CC8;background: rgba(0,0,0,0.065);">"{{currRowModel.selectedRelatedEntity.name}}"</code> 
+			 	instances
+			</div>
+			<!-- Please hold down <code>Ctrl + left mouse click</code> while selecting some area on the map.
+			<span ng-show="currRowModel != null">
+				Then <code>click on any pin</code> to select / de-select any 
+				<code style="color:#106CC8;background: rgba(0,0,0,0.065);">"{{currRowModel.selectedRelatedEntity.name}}"</code>.
+			</span>
+			-->
+		</div>
+		
+		<div uib-alert ng-repeat="alert in alerts"
+			 ng-class="'alert-' + (alert.type || 'warning')" 
+			 class='fadeAlert'
+			 close="alerts.splice($index, 1);">
+			{{alert.msg}}
+		</div>
+			
+		<style>
+			.map:-moz-full-screen {
+				height: 100%;
+			}
+			.map:-webkit-full-screen {
+				height: 100%;
+			}
+			.map:-ms-fullscreen {
+				height: 100%;
+			}
+			.map:fullscreen {
+				height: 100%;
+			}
+			
+			.ol-dragbox {
+				background-color: rgba(255,255,255,0.4);
+				border-color: rgba(100,150,0,1);
+			}
+		   
+			/* Overwritting CSS to provide scrollable pop-overflow */
+			.popover-content {
+				max-height: 200px;
+				overflow-y: auto;
+			}
+		</style>
+		
+		<div id="popup" style="width:300px;"></div>
+		<div id="map" class="map customGeocoder" style="height:450px;">
+			<div id="popup"></div>
+		</div>
+		<div layout="row">
+			<span layout-padding style="padding-bottom:0px;">
+				<div style="display: inline-block; font-style:italic;">
+					Coordinates of mouse position (display projection used is <code style="color:#106CC8;background: rgba(0,0,0,0.065);">'EPSG:4326'</code>): 
+				</div>
+				<div style="display: inline-block; font-style:italic;" id="mouse-position" flex></div>
+			</span>
+			
+			<!--
+			<span flex></span>
+			<span layout-padding style="padding-bottom:0px;">
+				<div style="display: inline-block; font-style:italic;">
+					<code style="color:#106CC8;background: rgba(0,0,0,0.065);">Total items to load:</code> {{entityResultsCount}}
+				</div>
+			</span>
+			-->
+		</div>
+		<div id="info"></div>
+	</md-dialog-content>
+	
+	<md-dialog-actions layout="row" style="padding-top:0px; padding-bottom:10px;">
+		<!--
+		<md-button class="md-raised md-primary" ng-click="closeSelectedFromMapDialogDialog($event, currRowModel)">
+			Use Region set / Selected Pins (if any)
+		</md-button>
+		-->
+		<span ng-show="fewPinsInsideBoundingBox.length <= 0">
+			<span ng-show="currRowModel.boundingBox || select.getFeatures().getLength() > 0">
+				<md-button class="md-raised md-primary" 
+						   ng-disabled="!currRowModel.boundingBox"
+						   ng-click="setRegionInQueryAndcloseMapDialogDialog($event, currRowModel)">
+					Add Marked Region
+				</md-button>
+				<md-button class="md-raised md-primary" 
+						   ng-disabled="select.getFeatures().getLength() <= 0"
+						   ng-click="setSelectedPinsInQueryAndcloseMapDialogDialog($event, currRowModel)">
+					Add Selected Pins ({{select.getFeatures().getLength()}})
+				</md-button>
+			</span>
+			<span ng-show="!currRowModel.boundingBox && select.getFeatures().getLength() <= 0">
+				<span>
+					<md-button class="md-raised md-primary" 
+							   ng-click="applyAndcloseMapDialogDialog($event, currRowModel)">
+						Apply Changes
+					</md-button>
+				</span>
+			</span>
+		</span>
+		<span ng-show="fewPinsInsideBoundingBox.length > 0">
+			<md-button class="md-raised md-primary" 
+					   ng-disabled="!currRowModel.boundingBox"
+					   ng-click="setPinsInsideBoundingBoxInQueryAndcloseMapDialogDialog($event, currRowModel)">
+				Add All Pins Inside The Marked Region ({{fewPinsInsideBoundingBox.length}})
+			</md-button>
+			<md-button class="md-raised md-primary" 
+					   ng-disabled="select.getFeatures().getLength() <= 0"
+					   ng-click="setSelectedPinsInQueryAndcloseMapDialogDialog($event, currRowModel)">
+				Add Selected Pins ({{select.getFeatures().getLength()}})
+			</md-button>
+		</span>
+		<span flex></span>
+		<span>
+			<md-button class="md-raised md-accent" 
+					   ng-click="closeSelectedFromMapDialogDialog($event, currRowModel)">
+				Cancel & Don't Apply Anything
+			</md-button>
+		</span>
+	</md-dialog-actions>
+	
+</md-dialog>
+	

@@ -1,0 +1,52 @@
+<md-dialog aria-label="Success Import File List">
+	<form ng-cloak>
+  
+		<md-toolbar layout="row" class="md-primary">
+      		<div class="md-toolbar-tools">
+        		<span>File(s) import status</span>
+      		</div>
+		</md-toolbar>
+  	
+  		<md-content>
+  			<md-list flex md-theme="altTheme">
+		        <md-toolbar layout="row" 
+		        			class="md-primary" 
+		        			ng-show="importSuccessAlerts.length > 0"
+		        			style="height: 50px;min-height: 50px;">
+					<div class="md-toolbar-tools" style="height: 50px;min-height: 50px;">
+		        		<span style="font-size:17px;">Successfully imported files</span>
+		      		</div>
+				</md-toolbar>
+		        <md-list-item class="md-2-line" ng-repeat="alert in importSuccessAlerts">
+	          		<div class="md-list-item-text" layout="column">
+	            		<h4 style="color:green; font-weight: bold;">{{alert.titleType}}</h4>
+	            		<h4 ng-bind-html="alert.msg"></h4>
+	          		</div>
+	          		<md-divider></md-divider>
+	        	</md-list-item>
+	        	
+	        	<md-toolbar layout="row" 
+	        				class="md-accent" 
+	        				ng-show="importErrorAlerts.length  > 0"
+	        				style="height: 50px;min-height: 50px;">
+					<div class="md-toolbar-tools" style="height: 50px;min-height: 50px;">
+		        		<span style="font-size:17px;">Failed imported files</span>
+		      		</div>
+				</md-toolbar>
+	        	<md-list-item class="md-2-line" ng-repeat="alert in importErrorAlerts">
+	          		<div class="md-list-item-text" layout="column">
+	            		<h4 style="color:rgb(255,64,129); font-weight: bold;">{{ alert.titleType }}</h4>
+	            		<h4 ng-bind-html="alert.msg"></h4>
+	          		</div>
+	          		<md-divider></md-divider>
+	        	</md-list-item>
+	    	</md-list>
+	    	<md-divider></md-divider>
+            <div style="padding:10px 10px 10px 10px;">
+				Please <code style="color:#106CC8;background: rgba(0,0,0,0.065);">click outside</code> 
+				of this dialog in order <code style="color:#106CC8;background: rgba(0,0,0,0.065);">to dismiss it</code>.
+			</<div>
+  		</md-content>
+  	
+	</form>
+</md-dialog>

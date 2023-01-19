@@ -1,0 +1,28 @@
+<md-dialog style="width:500px;">
+	<md-dialog-content id="dialogContent">
+		<div style="padding-left:30px;" class="row">
+			
+			<h4 class="md-flex">Please select some category, under which the new collection will be classified</h4>
+					
+			<div>
+				<md-select placeholder="Select collection's category" 
+						   ng-model="selectedCategory" 
+						   md-on-open="initCategories();" 
+						   aria-label="Select collection's Category">
+					<md-option ng-repeat="category in categories" ng-value="category">{{category.value}}</md-option>
+		        </md-select>
+			</div>
+			<div layout="row">
+				<md-button class="md-raised md-primary" 
+						   ng-click="continueAfterSelectingCategory(ev);" 
+						   ng-disabled="selectedCategory.id == null">
+					Continue
+		        </md-button>
+		        <span flex></span>
+		        <md-button class="md-raised md-accent" ng-click="closeNamedGraphSelectCategoryDialog();">
+					Cancel
+		        </md-button>
+			</div>
+		</div>
+	</md-dialog-content>
+</md-dialog>

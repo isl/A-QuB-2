@@ -1,0 +1,124 @@
+<style>
+
+	tbody {
+	    display:block;
+	    height: 315px;
+	    /*height: calc(100vh-200px);*/
+	    /*height: calc(100% - 40px);*/
+	    overflow:auto;
+	}
+	thead, tbody tr {
+	    display:table;
+	    width:100%;
+	    table-layout:fixed;
+	}
+
+</style>
+
+<md-dialog-content>
+	
+	<div id="popupContainerEntityInstanceSearch"></div>
+
+	<div style="padding-left:30px;" class="row">
+		<md-toolbar class="md-primary">
+			<div class="md-toolbar-tools">
+				<h2 class="md-flex">Data Results</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="closeRelatedEntitySearchResults($event, currRowModel)">
+					<md-icon class="md-secondary" 
+							 aria-label="Close Related Entity Search Results" 
+							 md-font-icon="fa fa-times" style="font-size:24px;">
+					</md-icon>
+		        </md-button>
+			</div>
+		</md-toolbar>
+		<div ng-show="relatedEntityResults.results.bindings.length > 0">
+			<table class="table table-striped table-condensed scrollTable"> <!--  table-hover -->
+				<thead>
+					<tr ng-repeat="item in relatedEntityResults.results.bindings|limitTo:1" class="ng-scope">
+						<th style="vertical-align:middle;">
+							<md-checkbox aria-label="Select Row" 
+										 ng-model="currRowModel.allRelatedSearchResultsIsSelected"
+										 ng-change="handleSelectAllRelatedSearchResults(currRowModel)"
+										 class="md-secondary"
+										 style="margin: 0px;">
+								{{'Search By Keyword' | uppercase}}
+							</md-checkbox>
+						</th>
+						<th ng-repeat="(key,val) in item" 
+							class="ng-binding" 
+							ng-if="key != 'isChecked' && key != 'uri' && key != 'east' && key != 'west' && key != 'north' && key != 'south'"
+							style="vertical-align:middle; padding:0;">
+								{{key | uppercase}} 
+						</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr ng-class="currRowModel.activeRelatedSearchResultsStyle">
+						<td>
+							<div class="text-center">
+								<ul uib-pagination items-per-page="itemsPerPage"
+									total-items="entityResultsCount" 
+									ng-model="currentPage"
+									max-size="maxSize" 
+									class="pagination-sm" 
+									boundary-links="true"
+									force-ellipses="true" 
+									ng-change="pageChanged()">
+								</ul>
+							</div>
+						</td>
+					<tr>
+					<tr>
+						<td layout="row">
+							<div flex>
+								<md-button class="md-raised md-primary" ng-click="closeRelatedEntitySearchResults($event, currRowModel)">
+									<md-icon md-font-icon="fa fa-check-circle-o" style="font-size:18px"></md-icon>
+									<span ng-show="!currRowModel.allRelatedSearchResultsIsSelected">Select</span> <!-- class="animate-cross-fade-show animate-cross-fade-hide" -->
+									<span ng-show="currRowModel.allRelatedSearchResultsIsSelected">Close</span>
+								</md-button>
+							</div>
+							<div class="text-right" ng-class="activeRelatedSearchResultsStyle">
+								Number of Results: <b>{{entityResultsCount}}</b>
+							</div>
+						</td>
+					</tr>
+				</tfoot>
+				<tbody ng-class="currRowModel.activeRelatedSearchResultsStyle">
+					<tr ng-repeat="item in relatedEntityResults.results.bindings" 
+						class="ng-scope" 
+						ng-class="{'disabled-style': (currRowModel.selectedRelatedInstanceList.length >= configuration.relatedEntity.selectedInstancesLimit && !item.isChecked)}">
+						<td style="vertical-align:middle;">
+							<md-checkbox aria-label="Select Row" 
+										 class="md-secondary"
+										 ng-model="item.isChecked"
+										 ng-change="changeSelectedRelatedItem(item, currRowModel, $event)"
+										 ng-disabled="currRowModel.allRelatedSearchResultsIsSelected || (currRowModel.selectedRelatedInstanceList.length >= configuration.relatedEntity.selectedInstancesLimit && !item.isChecked)"										 
+										 style="margin: 0px;">
+										 <!--
+										 ng-class="{disabled-style: (currRowModel.selectedRelatedInstanceList.length >= configuration.relatedEntity.selectedInstancesLimit && !item.isChecked)}"
+										 -->
+							</md-checkbox>
+						</td>
+						<!-- ng-click="addSelectedFromRelatedResults()" 
+							 ng-model="rowModelListselectedRelatedEntityResultList"-->
+						<td ng-repeat="(key,val) in item" 
+							class="ng-binding" 
+							ng-if="key != 'isChecked' && key != 'uri' && key != 'east' && key != 'west' && key != 'north' && key != 'south'"
+							style="vertical-align:middle; padding:0;">
+							{{val.value}}
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div ng-show="relatedEntityResults.results.bindings.length < 1" 
+			 style="color:rgb(63,81,181); 
+			 		font-size:20px;
+			 		text-align: center;
+	    			width: 100%;
+	    			margin-top:20%;">
+			No entries were found
+		</div>
+	</div>
+</md-dialog-content>

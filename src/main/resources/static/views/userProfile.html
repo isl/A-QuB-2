@@ -1,0 +1,354 @@
+<div class="section" style="padding:5px 20px;">
+
+    <div class="row">
+        <div class="column inside" style="width:100%">
+
+            <md-toolbar class="md-primary">
+                <div class="md-toolbar-tools">
+                    <md-icon md-font-icon="fa fa-user" style="padding-right:10px; font-size:36px;"/>
+                    <h2 class="md-flex" flex>{{headingTitle}}</h2>
+                    <md-button ng-click="toggleInfo()" class="md-icon-button" aria-label="Show Help">
+                        <md-icon md-font-icon="fa fa-question-circle" style="font-size:28px;">
+                            <md-tooltip md-delay="1000" md-direction="top">
+                                Help
+                            </md-tooltip>
+                    </md-button>
+                </div>
+            </md-toolbar>
+
+            <md-sidenav class="md-sidenav-right" 
+                        md-component-id="rightInfo"
+                        md-disable-backdrop 
+                        md-whiteframe="4"
+                        style="margin-top:79px;">
+
+                <md-toolbar class="md-accent">
+                    <div class="md-toolbar-tools">
+                        <md-button class="md-icon-button" aria-label="Hide Help" ng-click="toggleInfo()">
+                            <md-icon md-font-icon="fa fa-chevron-circle-right" style="font-size:24px"></md-icon>
+                        </md-button>
+
+                        <h2 class="md-flex">Help</h2>
+                        <span flex></span>
+                        <md-icon md-font-icon="fa fa-question" style="font-size:24px;"></md-icon>
+                    </div>
+                </md-toolbar>
+
+                <md-content layout-margin>
+                    <p>
+                    <div ng-include="'views/info/favoritesInfo.html'"></div>
+                    </p>
+
+                    <md-button ng-click="toggleInfo()" class="md-accent">
+                        Close this Sidenav
+                    </md-button>
+                </md-content>
+
+            </md-sidenav>
+
+            <!-- View Mode -->
+            <md-content id="mainContent" flex layout-padding style="overflow:visible;" layout="column">
+
+                <md-card ng-show="!editMode">
+                    <md-card-title>
+                        <md-card-title-text>
+                            <span class="md-headline">{{userProfile.name}} ({{userProfile.userId}})</span>
+                        </md-card-title-text>
+                    </md-card-title>
+
+                    <md-card-title-media>
+                        <div layout="column" style="padding-left:90px;">
+
+                            <div layout="row">
+                                <md-input-container>
+                                    <span style="padding:12px; float:left">
+                                    </span>
+                                    <span for="userIdView" style="font-weight: bold; width:150px; float:left">Username: </span>
+                                    <span id="userIdView">
+                                        {{userProfile.userId}}
+                                    </span>
+                                </md-input-container>
+                            </div>
+
+                            <div layout="row">
+                                <md-input-container>
+                                    <span style="float:left;">
+                                        <md-icon md-font-icon="mdi mdi-email-outline" 
+                                                 style="font-size:20px;">
+                                        </md-icon>
+                                    </span>
+                                    <span for="emailView" style="font-weight: bold; width:150px; float:left">E-Mail: </span>
+                                    <span id="emailView">
+                                        {{userProfile.email}}
+                                    </span>
+                                </md-input-container>
+                            </div>
+
+                            <div layout="row">
+                                <md-input-container>
+                                    <span style="float:left;">
+                                        <md-icon md-font-icon="mdi mdi-account" 
+                                                 style="font-size:20px;">
+                                        </md-icon>
+                                    </span>
+                                    <span for="nameView" style="font-weight: bold; width:150px; float:left">Name: </span>
+                                    <span id="nameView">
+                                        {{userProfile.name}}
+                                    </span>
+                                </md-input-container>
+                            </div>
+
+                            <div layout="row">
+                                <md-input-container>
+                                    <span style="float:left;">
+                                        <md-icon md-font-icon="fa fa-building-o" 
+                                                 style="font-size:20px;">
+                                        </md-icon>
+                                    </span>
+                                    <span for="organizationView" style="font-weight: bold; width:150px; float:left">Organization: </span>
+                                    <span id="organizationView">
+                                        {{userProfile.organization}}
+                                    </span>
+                                </md-input-container>
+                            </div>
+
+                            <div layout="row">
+                                <md-input-container>
+                                    <span style="float:left;">
+                                        <md-icon md-font-icon="fa fa-sitemap" 
+                                                 style="font-size:20px;">
+                                        </md-icon>
+                                    </span>
+                                    <span for="organizationURLView" style="font-weight: bold; width:150px; float:left">Organization URL: </span>
+                                    <span id="organizationURLView">
+                                        {{userProfile.organizationURL}}
+                                    </span>
+                                </md-input-container>
+                            </div>
+
+                            <div layout="row">
+                                <md-input-container>
+                                    <span style="float:left;">
+                                        <md-icon md-font-icon="mdi mdi-security" 
+                                                 style="font-size:20px;">
+                                        </md-icon>
+                                    </span>
+                                    <span for="roleView" style="font-weight: bold; width:150px; float:left">User Role: </span>
+                                    <span id="roleView">
+                                        {{userProfile.role}}
+                                    </span>
+                                </md-input-container>
+                            </div>	        
+
+                        </div>
+                    </md-card-title-media>
+
+                    <md-card-actions layout="row" layout-align="start center">
+                        <md-button class="md-raised md-primary" 
+                                   ng-click="enableEditProfileMode()">
+                            Edit Profile
+                        </md-button>
+                    </md-card-actions>
+
+                </md-card>
+
+
+                <form name="form" ng-submit="updateUserProfile()" ng-show="editMode">
+
+                    <md-card>
+                        <md-card-title>
+                            <md-card-title-text>
+                                <span class="md-headline">{{userProfile.name}} ({{userProfile.userId}})</span>
+                            </md-card-title-text>
+                        </md-card-title>
+
+                        <md-card-title-media>
+
+                            <div layout="column" style="padding-left:90px;">
+
+                                <div layout="row">
+                                    <md-input-container>
+                                        <label for="userid">Username</label>
+                                        <md-icon style="font-size:25px;"></md-icon>
+                                        <input type="text" 
+                                               name="userid" 
+                                               id="userid" 
+                                               ng-model="userProfile.userId" 
+                                               ng-disabled="true"
+                                               required  />
+                                        <div ng-messages="form.userid.$error">
+                                            <div ng-message="required">This is required</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+
+                                <div layout="row">
+                                    <md-input-container>
+                                        <label for="password">Password</label>
+                                        <md-icon style="font-size:25px;"></md-icon>
+                                        <input type="password" 
+                                               name="password" 
+                                               id="password" 
+                                               ng-model="userProfile.password" 
+                                               required />
+                                        <div ng-messages="form.password.$error">
+                                            <div ng-message="required">This is required</div>
+                                        </div>
+                                    </md-input-container>
+
+                                    <md-input-container>
+                                        <label for="confirmPassword">Re-enter Password</label>
+                                        <md-icon style="font-size:25px;"></md-icon>
+                                        <input type="password" 
+                                               name="confirmPassword" 
+                                               id="confirmPassword" 
+                                               ng-model="userProfile.confirmPassword" 
+                                               compare-to="userProfile.password"
+                                               required/>
+
+                                        <div ng-messages="form.confirmPassword.$error" multiple>
+                                            <div ng-message="required">This is required</div>
+                                            <div ng-message="compareTo">Must match the previous entry</div>
+                                        </div>
+                                    </md-input-container>
+
+                                </div>
+
+                                <div layout="row">
+                                    <md-input-container>
+                                        <label for="email">E-Mail</label>
+                                        <md-icon md-font-icon="mdi mdi-email-outline" style="font-size:25px;"></md-icon>
+                                        <input type="text" 
+                                               name="email" 
+                                               id="email" 
+                                               ng-model="userProfile.email" 
+                                               type="email"
+                                               minlength="8" 
+                                               md-maxlength="100" 
+                                               ng-pattern="/^.+@.+\..+$/"
+                                               required 
+                                               style="width:386px"/>
+                                        <div ng-messages="form.email.$error" role="alert" multiple>
+                                            <div ng-message="required">
+                                                This is required
+                                            </div>
+                                            <div ng-message="pattern">
+                                                Your email must look like an e-mail address
+                                            </div>
+                                            <div ng-message="md-maxlength">
+                                                Your email must have less than 100 characters
+                                            </div>
+                                            <div ng-message="minlength">
+                                                Your email must have more than 10 characters
+                                            </div>
+                                        </div>
+                                    </md-input-container>
+
+                                </div>
+
+                                <div layout="row">
+                                    <md-input-container>
+                                        <label for="name">Name</label>
+                                        <md-icon md-font-icon="mdi mdi-account" style="font-size:25px;"></md-icon>
+                                        <input type="text" 
+                                               name="name" 
+                                               id="name" 
+                                               ng-model="userProfile.name" 
+                                               required />
+                                        <div ng-messages="form.name.$error">
+                                            <div ng-message="required">This is required</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+
+                                <div layout="row">
+
+                                    <md-input-container>
+                                        <label for="organization">Organization</label>
+                                        <md-icon md-font-icon="fa fa-building-o" style="font-size:25px;"></md-icon>
+                                        <input type="text" 
+                                               name="organization" 
+                                               id="organization" 
+                                               ng-model="userProfile.organization" 
+                                               required />
+                                        <div ng-messages="form.organization.$error">
+                                            <div ng-message="required">This is required</div>
+                                        </div>
+                                    </md-input-container>
+
+                                </div>
+
+                                <div layout="row">
+
+                                    <md-input-container>
+                                        <label for="organization">Organization URL</label>
+                                        <md-icon md-font-icon="fa fa-sitemap" style="font-size:25px;"></md-icon>
+                                        <input type="text" 
+                                               name="organizationURL" 
+                                               id="organizationURL" 
+                                               ng-model="userProfile.organizationURL" 
+                                               required />
+                                        <div ng-messages="form.organizationURL.$error">
+                                            <div ng-message="required">This is required</div>
+                                        </div>
+                                    </md-input-container>
+
+                                </div>
+
+                                <div layout="row" ng-if="portalPolicy.portalState == 'private'">
+                                    <md-input-container>
+                                        <label>User Role</label>
+                                        <md-icon md-font-icon="mdi mdi-security" style="font-size:25px;"></md-icon>
+                                        <md-select ng-model="userProfile.role" 
+                                                   required 
+                                                   style="width:175px">
+                                            <md-option ng-repeat="role in roles" 
+                                                       value="{{role.value}}">
+                                                {{role.label}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="form.organization.$error">
+                                            <div ng-message="required">This is required</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+
+                                <div layout="row" ng-if="portalPolicy.portalState == 'public'" style="color:rgb(255,64,129);">
+                                    To request for an "Operator" user role (allowing users to import data), please contact with ... at ...
+                                </div>
+
+                                <div>
+                                    <md-divider></md-divider>
+                                </div>
+                            </div>
+
+                        </md-card-title-media>
+
+                        <md-card-actions layout="row" layout-align="start center" style="padding:15px;">
+                            <md-button type="submit" class="md-raised md-primary" ng-disabled="form.$invalid">
+                                Update Profile
+                            </md-button>
+
+                            <span style="color: rgb(221,44,0); font-style: italic;" 
+                                  ng-show="userProfile.password == null || userProfile.confirmPassword == null">
+                                (Don't forget to fill your existing password or a new one to replace the old)
+                            </span>
+
+                            <span flex></span>
+
+                            <md-button class="md-raised md-accent" 
+                                       ng-click="disableEditProfileMode()">
+                                Cancel
+                            </md-button>
+                        </md-card-actions>
+
+                    </md-card>
+
+                </form>
+
+            </md-content>
+
+        </div>
+    </div>
+
+</div>

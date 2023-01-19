@@ -1,0 +1,197 @@
+<div class="section" style="padding:5px 20px;">
+
+	<div class="row">
+		<div class="column inside" style="width:100%">
+
+		    <md-toolbar class="md-primary">
+				<div class="md-toolbar-tools">
+					<md-button class="md-fab md-mini" ng-click="goToLogin()">
+						<md-tooltip>Back to the Login Page</md-tooltip>
+			            <md-icon md-font-icon="mdi mdi-arrow-left-bold" style="font-size:25px;"></md-icon>
+			        </md-button>
+					<h2 class="md-flex" style="padding-left: 40px;">{{headingTitle}}</h2>
+				</div>
+			</md-toolbar>
+
+		    <form name="form" ng-submit="register()">
+				
+		        <md-content style="padding:8px 8px 8px 8px;">
+		        
+			        <div layout="column" style="padding-left:90px;">
+			        
+				        <div uib-alert ng-repeat="alert in alerts"
+							 ng-class="'alert-' + (alert.type || 'warning')" 
+							 class='fadeAlert'
+							 close="alerts.splice($index, 1);">
+							{{alert.msg}}
+						</div>
+						
+						<div layout="row"> <!-- style="width:600px;" -->
+				      		<md-input-container>
+				        		<label for="userid">Username</label>
+				        		<md-icon style="font-size:25px;"></md-icon>
+				        		<input type="text" 
+				        			   name="userid" 
+				        			   id="userid" 
+				        			   ng-model="registration.userid" 
+				        			   required />
+				        		<div ng-messages="form.userid.$error">
+									<div ng-message="required">This is required</div>
+								</div>
+				      		</md-input-container>
+						</div>
+						
+						<div layout="row">
+				        	<md-input-container>
+				            	<label for="password">Password</label>
+				            	<md-icon style="font-size:25px;"></md-icon>
+				            	<input type="password" 
+				            		   name="password" 
+				            		   id="password" 
+				            		   ng-model="registration.password" 
+				            		   required />
+				            	<div ng-messages="form.password.$error">
+									<div ng-message="required">This is required</div>
+								</div>
+				            </md-input-container>
+				            
+				            <md-input-container>
+				            	<label for="confirmPassword">Re-enter Password</label>
+				            	<md-icon style="font-size:25px;"></md-icon>
+				            	<input type="password" 
+				            		   name="confirmPassword" 
+				            		   id="confirmPassword" 
+				            		   ng-model="registration.confirmPassword" 
+				            		   required 
+				            		   compare-to="registration.password"/>
+			
+				            	<div ng-messages="form.confirmPassword.$error" multiple>
+									<div ng-message="required">This is required</div>
+									<div ng-message="compareTo">Must match the previous entry</div>
+								</div>
+				            </md-input-container>
+				            
+						</div>
+						
+						<div layout="row">
+				      		<md-input-container>
+				        		<label for="email">E-Mail</label>
+				        		<md-icon md-font-icon="mdi mdi-email-outline" style="font-size:25px;"></md-icon>
+				        		<input type="text" 
+				        			   name="email" 
+				        			   id="email" 
+				        			   ng-model="registration.email" 
+				        			   type="email"
+				        			   minlength="8" 
+				        			   md-maxlength="100" 
+				        			   ng-pattern="/^.+@.+\..+$/"
+				        			   required 
+				        			   style="width:386px"/>
+				        		<div ng-messages="form.email.$error" role="alert" multiple>
+						          <!--
+						          <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
+						            Your email must be between 10 and 100 characters long and look like an e-mail address
+						          </div>
+						          -->
+						          <div ng-message="required">
+						          	This is required
+						          </div>
+						          <div ng-message="pattern">
+						          	Your email must look like an e-mail address
+						          </div>
+						          <div ng-message="md-maxlength">
+					                Your email must have less than 100 characters
+					              </div>
+					              <div ng-message="minlength">
+					              	Your email must have more than 10 characters
+					              </div>
+						        </div>
+				      		</md-input-container>
+			
+				        </div>
+						
+						<div layout="row">
+				      		<md-input-container>
+				        		<label for="name">Name</label>
+				        		<md-icon md-font-icon="mdi mdi-account" style="font-size:25px;"></md-icon>
+				        		<input type="text" 
+				        			   name="name" 
+				        			   id="name" 
+				        			   ng-model="registration.name" 
+				        			   required />
+				        		<div ng-messages="form.name.$error">
+									<div ng-message="required">This is required</div>
+								</div>
+				      		</md-input-container>
+				        </div>
+				        
+				        <div layout="row">
+				        	
+				        	<md-input-container>
+				        		<label for="organization">Organization</label>
+				        		<md-icon md-font-icon="fa fa-building-o" style="font-size:25px;"></md-icon>
+				        		<input type="text" 
+				        			   name="organization" 
+				        			   id="organization" 
+				        			   ng-model="registration.organization" 
+				        			   required />
+				        		<div ng-messages="form.organization.$error">
+									<div ng-message="required">This is required</div>
+								</div>
+				      		</md-input-container>
+				        	       
+				        </div>
+				        
+				        <div layout="row">
+				        	
+				        	<md-input-container>
+				        		<label for="organization">Organization URL</label>
+				        		<md-icon md-font-icon="fa fa-sitemap" style="font-size:25px;"></md-icon>
+				        		<input type="text" 
+				        			   name="organizationURL" 
+				        			   id="organizationURL" 
+				        			   ng-model="registration.organizationURL" 
+				        			   required />
+				        		<div ng-messages="form.organizationURL.$error">
+									<div ng-message="required">This is required</div>
+								</div>
+				      		</md-input-container>
+				        	       
+				        </div>
+				        
+				        <div layout="row" ng-if="portalPolicy.portalState == 'private'">
+				        	<md-input-container>
+				        		<label>User Role</label>
+				        		<md-icon md-font-icon="mdi mdi-security" style="font-size:25px;"></md-icon>
+						        <md-select ng-model="registration.role" 
+						        		   required 
+						        		   style="width:175px">
+						          	<md-option ng-repeat="role in roles" 
+						          			   value="{{role.value}}">
+						          		{{role.label}}
+						        	</md-option>
+						        </md-select>
+				        		<div ng-messages="form.organization.$error">
+									<div ng-message="required">This is required</div>
+								</div>
+				      		</md-input-container>
+				        </div>	        
+			        	
+			        	<div class="form-actions">
+			            	<md-button type="submit" ng-disabled="form.$invalid" class="md-raised md-primary">Register</md-button>
+			        	</div>
+			        	
+			        	<div ng-if="portalPolicy.portalState == 'public'" style="color:rgb(255,64,129);">
+				        	To request for an "Operator" user role (allowing users to import data), please contact with ... at ...
+			        	</div>
+			        	
+			        </div>
+		        	
+		        </md-content>
+		        
+		    </form>
+		    
+		</div>
+	</div>
+        
+</div>

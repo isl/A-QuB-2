@@ -1,0 +1,43 @@
+<md-dialog aria-label="Mango (Fruit)">
+	<form name="mfaForm" ng-submit="proceedWidthMFACode()" ng-cloak>
+		<md-dialog-content>
+			<div class="md-dialog-content">
+				<h2>Multifactor Authentication</h2>
+				<p>
+					In a few seconds you will receive some <code style="color:#106CC8;background: rgba(0,0,0,0.065);">code</code> 
+					on your mobile phone through the Telegram application.
+				</p>
+				
+				<div uib-alert ng-repeat="alert in dialogAlerts"
+					 ng-class="'alert-' + (alert.type || 'warning')" 
+					 class='fadeAlert'
+					 close="alerts.splice($index, 1);">
+					{{alert.msg}}
+				</div>
+				
+				<md-input-container>
+					<label for="mfacode">
+						Enter Received Code
+					</label>
+					<input type="text" 
+		        		   name="mfacode" 
+		        		   id="mfacode" 
+		        		   ng-model="mfaCode" 
+		        		   required>
+					<div ng-messages="mfaForm.mfacode.$error">
+						<div ng-message="required">Please fill out this field</div>
+					</div>
+				</md-input-container>
+			</div>
+		</md-dialog-content>
+
+		<md-dialog-actions layout="row">
+			<md-button type="submit" ng-disabled="mfaForm.$invalid" class="md-raised md-primary">
+       			Proceed
+			</md-button>
+			<md-button ng-click="cancelMdfCode()">
+				Cancel
+			</md-button>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

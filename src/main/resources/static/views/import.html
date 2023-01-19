@@ -1,0 +1,131 @@
+<div class="section" style="padding:5px 20px;" ng-cloak>
+
+
+
+<div class="row">
+
+	<div class="column section inside" style="width:100%;" ng-cloak>
+		<md-toolbar class="md-primary _md _md-toolbar-transitions">
+			<div class="md-toolbar-tools">
+				<h2 class="md-flex">{{headingTitle}}</h2>
+				<span flex></span>
+				<h5 class="md-flex" ng-show="selectedFormat != null">Content-Type: {{selectedFormat}}</h5>
+				
+				<div>
+					<md-button ng-click="toggleInfo()" class="md-icon-button" aria-label="Show Help">
+			            <!-- <md-icon md-font-icon="fa fa-info-circle" style="font-size:28px;"></md-icon> -->
+			            <md-icon md-font-icon="fa fa-question-circle" style="font-size:28px;">
+			            <md-tooltip md-delay="1000" md-direction="top">
+							Help
+						</md-tooltip>
+			        </md-button>
+		        </div>
+				
+				
+				
+			</div>
+		</md-toolbar>
+		
+		<md-sidenav class="md-sidenav-right" 
+				md-component-id="rightInfo"
+               	md-whiteframe="4"
+               	md-disable-backdrop
+               	style="margin-top:79px;">
+
+			<md-toolbar class="md-accent">
+				<div class="md-toolbar-tools">
+					<md-button class="md-icon-button" aria-label="Hide Help" ng-click="toggleInfo()">
+	         				<md-icon md-font-icon="fa fa-chevron-circle-right" style="font-size:24px"></md-icon>
+	       			</md-button>
+					
+					<h2 class="md-flex">Help</h2>
+					<span flex></span>
+					<!-- <md-icon md-font-icon="fa fa-info" style="font-size:24px;"></md-icon>-->
+					<md-icon md-font-icon="fa fa-question" style="font-size:24px;"></md-icon>
+				</div>
+			</md-toolbar>
+	
+			<md-content layout-margin>
+				<p>
+					<div ng-include="'views/info/importInfo.html'"></div>
+				</p>
+				
+				<div layout="row">
+					<md-button ng-click="toggleInfo()" class="md-accent">
+						Close this Sidenav
+					</md-button>
+				</div>
+			</md-content>
+	
+		</md-sidenav>
+		
+		<div uib-alert ng-repeat="alert in alerts"
+			 ng-class="'alert-' + (alert.type || 'warning')" class="fadeAlert"
+			 close="alerts.splice($index, 1);"
+			 style="margin-top:10px;">
+			<span ng-bind-html="alert.msg"></span>
+			<md-button md-no-ink 
+					   class="md-primary slim"
+					   ng-click="showAdvanced($event)" 
+					   ng-show="alert.showDetails != null">
+      			More Details ...
+    		</md-button>
+		</div>
+		
+		<!-- Dropzone -->
+		<div>
+			<md-progress-linear md-mode="determinate" value="{{progressValue}}" flex></md-progress-linear>
+			<form class="dropzone" dropzone="dropzoneConfig" id="dropzone">
+				<div class="dz-default dz-message"
+					 style="color: #a0a0a0; font-size: 250%; text-align: center; margin: 2em 0;">
+					Drop file(s) here or click to upload.
+				</div>
+			<form>
+		</div>
+		
+		<!-- Components for content-type, upload and reset -->
+		<section layout="row" layout-sm="column" layout-align="end center" layout-wrap>
+			<md-backdrop ng-show="processStarted" class="md-opaque" ng-cloak></md-backdrop>
+			<md-select ng-model="selectedFormat" class="md-no-underline" placeholder="File's Content-Type">
+				<md-option ng-repeat="format in formats" ng-value="format" >
+					{{format}}
+				</md-option>
+			</md-select>
+        
+        	<!-- Input text for namegraph -->
+			<md-autocomplete md-no-cache="true"
+							 md-selected-item="selectedNamedGraph" 
+							 md-search-text="searchText"
+							 md-items="item in querySearch(searchText)"
+							 md-item-text="item.label"
+							 md-min-length="0"
+							 placeholder="Collection"
+							 style="padding-right:5px; width:500px;">
+		        <md-item-template>
+		          <span md-highlight-text="searchText" md-highlight-flags="^i">{{item.label}}</span>
+		        </md-item-template>
+				<md-not-found>
+	          		Since the collection "{{searchText}}" doesn't exist, a new one will be created.
+	        	</md-not-found>
+      		</md-autocomplete>
+        
+			<md-button class="md-raised md-primary" ng-click="uploadFile($event)" ng-disabled="!file || !searchText">
+				Import Data
+			</md-button>
+	      
+			<md-button class="md-raised md-accent" ng-click="reset()">
+				Reset
+			</md-button>
+	      
+	    </section>
+			
+		
+		<div>
+		</div>
+	
+		<script type="text/javascript">
+			dropzone.autoDiscover = false;
+		</script>
+	</div>
+    
+</div>

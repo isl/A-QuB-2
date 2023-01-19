@@ -1,0 +1,102 @@
+<div class="section" style="padding:5px 20px;">
+	
+	<div class="row">
+		<div class="column inside" style="width:100%">
+	
+			<md-toolbar class="md-primary">
+				<div class="md-toolbar-tools">
+					<md-icon md-font-icon="fa fa-star" style="padding-right:10px; font-size:36px;"/>
+					<h2 class="md-flex" flex>{{headingTitle}}</h2>
+			        <md-button ng-click="toggleInfo()" class="md-icon-button" aria-label="Show Help">
+			            <md-icon md-font-icon="fa fa-question-circle" style="font-size:28px;">
+			            <md-tooltip md-delay="1000" md-direction="top">
+							Help
+						</md-tooltip>
+			        </md-button>
+				</div>
+			</md-toolbar>
+			
+			<md-sidenav class="md-sidenav-right" 
+					md-component-id="rightInfo"
+		              	md-disable-backdrop 
+		              	md-whiteframe="4"
+		              	style="margin-top:79px;">
+		
+				<md-toolbar class="md-accent">
+					<div class="md-toolbar-tools">
+						<md-button class="md-icon-button" aria-label="Hide Help" ng-click="toggleInfo()">
+	          				<md-icon md-font-icon="fa fa-chevron-circle-right" style="font-size:24px"></md-icon>
+	        			</md-button>
+						
+						<h2 class="md-flex">Help</h2>
+						<span flex></span>
+						<!-- <md-icon md-font-icon="fa fa-info" style="font-size:24px;"></md-icon>-->
+						<md-icon md-font-icon="fa fa-question" style="font-size:24px;"></md-icon>
+					</div>
+				</md-toolbar>
+		
+				<md-content layout-margin>
+					<p>
+						<div ng-include="'views/info/favoritesInfo.html'"></div>
+					</p>
+						
+					<md-button ng-click="toggleInfo()" class="md-accent">
+						Close this Sidenav
+					</md-button>
+				</md-content>
+		
+			</md-sidenav>
+			
+			<md-content id="mainContent" flex layout-padding style="overflow:visible;" layout="column">
+				
+				<form ng-submit="$event.preventDefault()" name="searchForm">
+				
+					<table class="table table-striped table-condensed table-hover scrollTable">
+						<thead>
+							<tr ng-repeat="item in favoriteModels|limitTo:1" class="ng-scope">
+								<th ng-repeat="property in templateAry(item) | orderBy:'-key'" 
+									class="ng-binding" 
+									style="vertical-align:middle; padding:0;">
+										{{property.key | uppercase}} 
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="item in favoriteModels" class="ng-scope" ng-click="setSelectedFavoriteModel();">
+								<td ng-repeat="property in templateAry(item) | orderBy:'-key'" 
+									class="ng-binding" 
+									style="vertical-align:middle; padding:0 5px; min-width:200px;">
+									{{property.val}}
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<md-divider></md-divider>
+					<div layout="row">
+						<div flex>
+							<md-button class="md-raised md-primary"
+									   ng-click="loadQueryModel();"
+									   ng-disabled="!selectedFavoriteModel">
+								<md-icon md-font-icon="fa fa-check-circle-o" style="font-size:18px"/>
+								Load
+							</md-button>
+						</div>
+						<div>
+							<md-button class="md-raised md-primary"
+									   ng-click="deleteQueryModel($event);"
+									   ng-disabled="!selectedFavoriteModel">
+								<md-icon md-font-icon="fa fa-trash-o" style="font-size:18px"/>
+								Delete
+							</md-button>
+						</div>
+					</div>
+					
+				
+				</form>
+			</md-content>
+			
+		</div>
+		
+	</div>
+
+</div>

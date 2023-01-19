@@ -1,0 +1,52 @@
+<div>
+
+    <md-content> <md-card>
+
+            <div ng-show="resultItemNavHistory.length > 1" class="zoom-show-hide">
+                <md-button class="md-primary md-hue-1" aria-label="Hide Help"
+                           ng-click="handlePreviousSelectedResultItem();"> <md-icon
+                        md-font-icon="fa fa-angle-left"
+                        style="font-size:24px; margin-top:-4px;"></md-icon> <span>Previous
+                        Entity ({{previousResultItemNavHistory.title}})</span> <md-tooltip
+                        md-delay="1000" md-direction="top"> Previous </md-tooltip> </md-button>
+            </div>
+            <md-card-title style="display:block;">
+                <table style="width: 80%;"
+                       ng-repeat="(key,val) in currSelectedResultItem.result" border="1"
+                       class="table table-striped table-condensed table-hover scrollTable">
+                    <thead>
+                        <tr style="background-color: rgb(255, 64, 129);" class="ng-scope">
+                            <th style="text-align: center;">{{ key | uppercase}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="ng-scope">
+
+                            <td class="ng-binding"
+                                style="vertical-align:middle; padding:0px 5px; word-break: break-all;">
+                                <ul style="list-style: disc; margin-bottom: 0px;">
+                                    <li 
+                                        ng-click="v.uri != '' && v.entityName != '' ? handleSelectedResultItem(v.value, v.uri, v.entityName, false, false) : (v.type == 'uri' ? goToPage(v.value) : false)"
+                                        ng-style="{ 'cursor' : ((v.uri != '' && v.entityName != '') || v.type == 'uri') ? 'pointer' : 'auto' }"
+                                        ng-repeat="(k,v) in val">
+                                        <span ng-if="!isImage(v.value)">{{v.value}}</span>
+                                        <a ng-if="isImage(v.value)" href="/aqub/download/file/{{v.value}}" target="blank_">
+                                            <img src="/aqub/download/file/{{v.value}}"  
+                                                 title="{{val.uri}}">
+                                            </img>
+                                         </a>
+                                    </li>
+                                </ul> <span title="{{val.uri}}"
+                                            ng-click="handleSelectedResultItem(item, val.uri, val.entityName, false, false)"
+                                            ng-repeat="(key,val) in obj track by $index">{{val.value}} <span
+                                        ng-if="key < obj.length - 1">
+                                        <hr style="margin-top: 0px; margin-bottom: 0px;" />
+                                    </span>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </md-card-title> </md-card> </md-content>
+
+</div>

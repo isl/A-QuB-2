@@ -1,0 +1,589 @@
+<div layout="row" ng-cloak>
+    <!-- rowModel.disabled-style -->
+
+    <!--<md-subheader class="md-no-sticky">SubHeader</md-subheader> -->
+
+    <!-- Not First -->
+    <div class="lock-size" layout-align="center center" class="animate-show animate-hide" ng-show="!$first"
+         style="width:72px" ng-cloak>
+
+        <md-fab-speed-dial md-open="false" md-direction="down" ng-class="targetSpeedDialMode">
+            <md-fab-trigger>
+                <md-button class="md-fab md-mini md-primary" ng-disabled="!configuration.wholeTreeModel.bothAndOr"
+                           style="margin-top:115px;">
+                    {{ rowModel.outerSelectedFilterExpression}}
+                    <md-tooltip md-delay="1000" md-direction="top">
+                        Press to change logical expression
+                    </md-tooltip>
+                </md-button>
+            </md-fab-trigger>
+
+            <md-fab-actions>
+                <md-button aria-label="Any of the folowing" class="md-fab md-primary md-raised md-mini"
+                           ng-click="changeLogicalExpressionOfRowModel(rowModel)"
+                           style="background-color: rgb(179, 174, 176);">
+                    <span ng-if="rowModel.outerSelectedFilterExpression == 'OR'">
+                        AND
+                    </span>
+                    <span ng-if="rowModel.outerSelectedFilterExpression == 'AND'">
+                        OR
+                    </span>
+                </md-button>
+            </md-fab-actions>
+        </md-fab-speed-dial>
+    </div>
+
+    <!-- First -->
+    <!-- <div class="lock-size" layout-align="center center" ng-if="$first && $last" ng-cloak> -->
+    <div class="lock-size" layout-align="center center" ng-show="$first" class="animate-show animate-hide"
+         style="width:72px" ng-cloak>
+        <!-- style="width:72px" -->
+
+        <!-- Description text for applied filter-->
+        <div ng-show="parent.rowModel != null" style="position:absolute; 
+             color:rgb(63,81,181);
+             margin-top:30px;" ng-style="{'margin-left':'calc( - 270px - ' + rowModel.level + ' * 72px)'}">
+            <span>
+                <span>
+                    <md-icon md-svg-src="../aqub/images/down-right-arrow.svg" aria-label="One Level Inside"
+                             style="font-size:24px; color:rgb(63,81,181); padding-left:5px;">
+                    </md-icon>
+                </span>
+                <span>
+                    Filter on entity <i>"{{parent.rowModel.selectedRelatedEntity.name}}"</i>
+                </span>
+                <br />
+            </span>
+            <span
+                ng-show="parent.rowModel.relatedEntitySearchText != '' && parent.rowModel.selectedRelatedInstanceList.length < 1"
+                style="padding-left:29px;">
+                Matching search text: <i>"{{parent.rowModel.relatedEntitySearchText}}"</i>
+                <br />
+            </span>
+            <span
+                ng-show="parent.rowModel.relatedChips.length > 0 && parent.rowModel.selectedRelatedInstanceList.length < 1"
+                style="padding-left:29px;">
+                Matching key-words:
+                </br>
+                <ul>
+                    <li ng-repeat="chip in parent.rowModel.relatedChips|limitTo:2" style="list-style-type: none;">
+                        <span style="background: rgb(224,224,224);
+                              padding: 2px 8px;
+                              border-radius: 32px;
+                              font-size: 13px;">
+                            <i>{{chip.name}}</i>
+                        </span>
+                        <span ng-if="!$last">, </span>
+                        <span ng-if="$last && parent.rowModel.relatedChips.length > 2"> ... </span>
+                    </li>
+                </ul>
+            </span>
+            <span ng-show="parent.rowModel.selectedRelatedInstanceList.length > 0" style="padding-left:29px;">
+                Instances:
+                </br>
+                <ul>
+                    <li ng-repeat="instance in parent.rowModel.selectedRelatedInstanceList|limitTo:2"
+                        style="list-style-type:none;">
+                        <!-- 
+                                        limiTo on Object: 
+                                        https://stackoverflow.com/questions/25868760/angularjs-limitto-filter-for-ngrepeat-on-an-object-used-like-a-dictionary
+                        -->
+                        <span style="background: rgb(224,224,224);
+                              padding: 2px 8px;
+                              border-radius: 32px;
+                              font-size: 13px;">
+                            <i ng-repeat="(key,val) in instance" ng-if="key != 'isChecked' && key != 'uri'">
+                                <span ng-if="!$first && $index < 2">-</span>
+                                <span ng-if="$index < 2">{{val.value.slice(0, 15)}}</span>
+                                <span ng-if="val.value.length > 15">...</span>
+                            </i>
+                        </span>
+                        <span ng-if="!$last">, </span>
+                        <span ng-if="$last && parent.rowModel.selectedRelatedInstanceList.length > 2"> ... </span>
+                    </li>
+                </ul>
+            </span>
+        </div>
+
+        <md-button ng-show="rowModel.activeRowModelStyle == 'disabled-style'" aria-label="menu"
+                   class="md-fab blue-button" ng-click="enableFirstRelatedEntity($event);"
+                   ng-disabled="targetModel.selectedTargetEntity == null" style="margin-top:109px">
+            <md-icon md-font-icon="fa fa-plus" style="font-size:24px"></md-icon>
+            <md-tooltip md-delay="1000" md-direction="top" ng-show="targetModel.selectedTargetEntity == null">
+
+                Select some target entity to enable more options
+            </md-tooltip>
+            <md-tooltip md-delay="1000" md-direction="top" ng-show="targetModel.selectedTargetEntity != null">
+
+                Add a new filter on target entity "{{targetModel.selectedTargetEntity.name}}"
+            </md-tooltip>
+        </md-button>
+
+        <div ng-class="rowModel.activeRowModelStyle" class="zoom-show-hide"
+             ng-show="parent.rowModel == null && configuration.everyRowModel.degreeLimit >= rowModelList.length">
+
+            <md-fab-speed-dial ng-style="{ 'display' : (rowModel.activeRowModelStyle == 'disabled-style') ? 'none' : 'block' }"  md-open="true"
+                               md-direction="down"  ng-class="targetSpeedDialMode" style="margin-top:103px">
+                <md-fab-trigger>
+                    <md-button aria-label="menu" class="md-fab green-button"
+                               ng-disabled="rowModel.activeRowModelStyle == 'disabled-style'">
+                        <md-icon md-font-icon="fa fa-plus" style="font-size:24px"></md-icon>
+                    </md-button>
+                </md-fab-trigger>
+
+                <md-fab-actions ng-hide="rowModel.activeRowModelStyle == 'disabled-style'"
+                                ng-repeat="filterExpression in targetModel.availableFilterExpressions">
+                    <md-button aria-label="Any of the folowing" class="md-fab md-primary md-raised md-mini"
+                               style="background-color: rgb(179, 174, 176);"
+                               ng-click="addNewEmptyRowModel(parent.rowModel, filterExpression.expression)">
+                        {{filterExpression.expression}}
+                    </md-button>
+                </md-fab-actions>
+                <md-tooltip md-delay="1000" md-direction="top">
+                    Add a new filter on entity "{{targetModel.selectedTargetEntity.name}}"
+                </md-tooltip>
+            </md-fab-speed-dial>
+        </div>
+    </div>
+
+    <!-- Projection -->
+    <div layout="row" style="height:296px; 
+         padding:5px 5px; 
+         border:1px solid #ccc;
+         border-radius: 5px;" class="animate-show animate-hide">
+
+        <div layout="column" style="max-width:260px;min-width:230px;" ng-class="rowModel.activeRelationModelStyle">
+
+            <md-toolbar class="md-primary narrow-toolbar">
+                <div class="md-toolbar-tools" layout-align="start center">
+                    <h2>... related</h2>
+                </div>
+            </md-toolbar>
+
+            <md-content layout-padding>
+
+                <md-input-container class="md-block">
+                    <label>Select Relation</label>
+                    <md-select ng-model="rowModel.selectedRelation" ng-model-options="{trackBy: '$value.id'}"
+                               name="relationInput_{{rowModel.id}}"
+                               ng-disabled="rowModel.activeRelationModelStyle == 'disabled-style'"
+                               ng-required="rowModel.activeRowModelStyle == 'enabled-style'"
+                               ng-change="loadRelatedEntitiesByRelation(parent.rowModel, rowModel);" md-no-asterisk="false">
+                        <md-option ng-repeat="relation in rowModel.relations" ng-value="relation" style="height:40px;">
+                            <!-- track by $index -->
+                            {{relation.name}}
+                            <!-- <span ng-show="relation.duplicate"> - {{relation.relatedEntity.name}}</span> -->
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="searchForm['relationInput_' + rowModel.id].$error">
+
+                        <div ng-message="required">
+                            This is required
+                            <br />
+                            <span ng-show="rowModel.backupSelectedRelation != null">search by keyword
+                                <i>"{{rowModel.backupSelectedRelation.name}}" was previously selected</i>
+                            </span>
+                        </div>
+                    </div>
+                </md-input-container>    
+
+            </md-content>
+
+        </div>
+
+        <div layout="column" style="width:270px;" ng-class="rowModel.activeRowModelStyle">
+
+            <md-toolbar class="md-primary narrow-toolbar">
+                <div class="md-toolbar-tools" layout-align="start center">
+                    <h2>... to entity</h2>
+                </div>
+            </md-toolbar>
+
+            <md-content layout-padding>
+
+                <md-input-container class="md-block shrinked">
+                    <label>Select Related Entity</label>
+                    <md-select ng-model="rowModel.selectedRelatedEntity" ng-model-options="{trackBy: '$value.id'}"
+                               name="relatedEntityInput_{{rowModel.id}}"
+                               ng-disabled="rowModel.activeRowModelStyle == 'disabled-style'"
+                               selected="rowModel.selectedRelatedEntity"
+                               ng-change="loadRelatedEntitiesAndRelationsByTarget($event, parent.rowModel, rowModel, rowModel.selectedRelatedEntity, 'relatedEntitySelect'); clearFieldsRelated(rowModel);"
+                               md-no-asterisk="false" ng-required="rowModel.activeRowModelStyle == 'enabled-style'">
+                        <md-option ng-repeat="entity in rowModel.relatedEntities" ng-value="entity" style="height:40px;">
+                            {{entity.name}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="searchForm['relatedEntityInput_' + rowModel.id].$error">
+
+                        <div ng-message="required">
+                            This is required
+                            <br />
+                            <span ng-show="rowModel.backupSelectedRelation != null">
+                                <i>"{{rowModel.backupSelectedRelatedEntity.name}}" was previously selected</i>
+                            </span>
+                        </div>
+                    </div>                    
+                </md-input-container>
+                <div style="margin-top:-8px;">
+                    <span style="vertical-align: middle; padding-right: 5px;" ng-show="rowModel.selectedRelatedEntity != undefined && (rowModel.selectedRelatedEntity.entityType).includes('GEOSPATIAL')">Select Region</span>                                    
+                    <md-button layout-align="end end" class="md-icon-button withHover" aria-label="Map"
+                               ng-click="showMapForRelatedResultsDialog($event, rowModel)" 
+                               ng-show="rowModel.selectedRelatedEntity != undefined && (rowModel.selectedRelatedEntity.entityType).includes('GEOSPATIAL')">
+                        <md-icon md-font-icon="fa fa-globe" style="font-size:24px"></md-icon>
+                    </md-button>
+
+                    <md-tooltip
+                        ng-show="rowModel.selectedRelatedEntity != undefined && (rowModel.selectedRelatedEntity.entityType).includes('GEOSPATIAL')"
+                        md-direction="top" md-delay="1500">
+                        Restrict search geographically through the map
+                    </md-tooltip>
+                    <!-- md-tooltip ng-show="rowModel.selectedRelatedEntity == null" md-delay="1000" md-direction="top">
+                            Select some related entity first
+                    </md-tooltip>
+                    <md-tooltip ng-show="rowModel.selectedRelatedEntity.geospatial == 'FALSE'" md-delay="1000"
+                            md-direction="top">
+                            The selected related entity has no geospatial nature
+                    </md-tooltip-->
+                </div>
+                <div ng-show="rowModel.boundingBox" style="margin-left:-27px; padding-top: 11px;">
+                    <md-icon md-svg-src="../aqub/images/boundingBox_blue.svg" style="font-size:24px;"></md-icon>
+                    <md-tooltip md-delay="1000" md-direction="top">
+                        Geographical bounding box has been set for this related entity
+                    </md-tooltip>
+                </div>
+                <div style="padding:0; 
+                     margin-top:1px;
+                     overflow: auto;
+                     margin-left:6px;
+                     max-width:238px;
+                     max-height: 120px;
+                     min-height: 20px;">
+                    <span>
+                        <md-chips ng-model="rowModel.relatedChips" md-removable="true" class="shrinked-alterned"
+                                  md-enable-chip-edit="true" md-transform-chip="transformChip($chip)" md-max-chips="3"
+                                  ng-show="rowModel.selectedRelatedEntity != undefined && ((rowModel.selectedRelatedEntity.entityType).includes('LITERAL') || (rowModel.selectedRelatedEntity.entityType).includes('STRING'))" 
+                                  md-on-add="loadRelatedEntitiesAndRelationsByTarget($event, parent.rowModel, rowModel, rowModel.selectedRelatedEntity, 'relatedChipChange');validateChip($chip,rowModel.relatedChips)"
+                                  md-on-remove="loadRelatedEntitiesAndRelationsByTarget($event, parent.rowModel, rowModel, rowModel.selectedRelatedEntity, 'relatedChipChange')"
+                                  md-add-on-blur="true" style="padding:0;display: inline-block;width:170px;">
+                            <md-autocomplete flex layout-xs md-input-name="relatedEntityInput" class="shrinked"
+                                             md-no-cache="true" md-dropdown-items="5"
+                                             md-selected-item="rowModel.selectedRecomentation"
+                                             md-search-text="rowModel.relatedEntitySearchText"
+                                             md-selected-item-change="selectedItemChange(item, outerIndex)"
+                                             md-items="item in querySearch(rowModel.relatedEntitySearchText, outerIndex)"
+                                             md-item-text="item.name" md-min-length="2"
+                                             ng-show="rowModel.selectedRelatedEntity != undefined && ((rowModel.selectedRelatedEntity.entityType).includes('LITERAL') || (rowModel.selectedRelatedEntity.entityType).includes('STRING'))" placeholder="Containing keyword"
+                                             ng-focus="loadThesaurus(rowModel.selectedRelatedEntity, outerIndex)"
+                                             style="font-size:14px;min-width:100px">
+                                <!-- required md-floating-label="Search for keyword"  -->
+                                <!-- md-selected-item-change="selectedItemChange(item, outerIndex)" -->
+                                <md-item-template>
+                                    <span md-highlight-text="rowModel.relatedEntitySearchText"
+                                          style="width:200px">{{item.name}}</span>
+                                </md-item-template>
+                                <!-- remove until we decide how to fix : konsolak -->
+                                <!-- md-not-found>
+                                    No terms matching "{{rowModel.relatedEntitySearchText}}" were found.
+                                </md-not-found-->
+                            </md-autocomplete>
+
+                            <md-chip-template>
+                                <span style="font-size:14px;">
+                                    {{$chip.name}}
+                                </span>
+                            </md-chip-template>
+                        </md-chips>						
+                    </span>
+                    <span>
+                        <md-button class="md-icon-button"
+                                   ng-show="rowModel.selectedRelatedEntity != undefined && (rowModel.selectedRelatedEntity.entityType).includes('LITERAL')"
+                                   ng-click="showResultsDialog($event, rowModel)" style="padding:0px; 
+                                   margin:0px; 
+                                   margin-bottom:25px; 
+                                   display:inline-block;">
+                            <md-icon md-font-icon="fa fa-search" style="font-size:24px"></md-icon>
+                        </md-button>
+
+                        <md-tooltip
+                            ng-show="rowModel.selectedRelatedEntity != undefined && (rowModel.selectedRelatedEntity.entityType).includes('LITERAL')"
+                            md-delay="1500" md-direction="top">
+                            Search for specific instance of "{{rowModel.selectedRelatedEntity.name}}" entity
+                        </md-tooltip>
+                        <md-tooltip
+                            ng-show="rowModel.selectedRelatedEntity.name == '' || (rowModel.relatedEntitySearchText == '' && rowModel.relatedChips.length === 0)"
+                            md-delay="1000" md-direction="top">
+                            Enter some keywords to enable search for this entity
+                        </md-tooltip>
+                    </span>
+                </div>
+
+                <div style="display: flex; margin-top: -17px; margin-left: -6px;">
+                    <md-input-container class="md-block" flex-gt-sm
+                                        ng-show="rowModel.selectedRelatedEntity != undefined && (rowModel.selectedRelatedEntity.entityType).includes('NUMERIC')">
+                        <input  type="number" name="numericFrom_{{rowModel.id}}"
+                                ng-model="rowModel.numericRange.from" placeholder="From"
+                                ng-change="loadRelatedEntitiesAndRelationsByTarget($event, null, rowModel, rowModel.selectedRelatedEntity, 'relatedFromNumericChange')"
+                                ng-pattern="/^\-?\d+((\.|\,)\d+)?$/" />
+                        <div ng-messages="searchForm['numericFrom_' + rowModel.id].$error">
+                            <div ng-message="pattern">Please enter a valid number</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm
+                                        ng-show="rowModel.selectedRelatedEntity != undefined && (rowModel.selectedRelatedEntity.entityType).includes('NUMERIC')">
+                        <input  type="number" name="numericTo_{{rowModel.id}}"
+                                ng-model="rowModel.numericRange.to" placeholder="To"
+                                ng-change="loadRelatedEntitiesAndRelationsByTarget($event, null, rowModel, rowModel.selectedRelatedEntity, 'relatedToNumericChange')"
+                                ng-pattern="/^\-?\d+((\.|\,)\d+)?$/"
+                                greater-than = "rowModel.numericRange.from" />
+                        <div ng-messages="searchForm['numericTo_' + rowModel.id].$error">
+                            <div ng-message="pattern">Please enter a valid number</div>
+                            <div ng-message="greaterThan">Equal or greater than from</div>
+                        </div>
+                    </md-input-container>
+
+                </div>
+                <div style="display: flex; margin-top: -17px; margin-left: -6px;">
+                    <md-icon  onclick="window.open('/aqub/timePrimitive_help.html', 'time_primitive', 'left=' +  window.screenLeft + ',top=' + window.screenTop + ',width=' + 450 + ',height=' + 580 + ',resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no');" style=" font-size: 20px;" ng-show="rowModel.selectedRelatedEntity != undefined && (rowModel.selectedRelatedEntity.entityType).includes('TIME_PRIMITIVE')" md-font-icon="fa fa-question-circle">
+                    </md-icon>
+                    <md-input-container class="md-block" flex-gt-sm
+                                        ng-show="rowModel.selectedRelatedEntity != undefined && (rowModel.selectedRelatedEntity.entityType).includes('TIME_PRIMITIVE')">
+                        <input  type="text" name="timePrimitiveFrom_{{rowModel.id}}"
+                                ng-model="rowModel.timePrimitive.from" placeholder="From Date" 
+                                ng-change="loadRelatedEntitiesAndRelationsByTarget($event, null, rowModel, rowModel.selectedRelatedEntity, 'relatedFromTimePrimitiveChange')"
+                                />
+
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm
+                                        ng-show="rowModel.selectedRelatedEntity != undefined && (rowModel.selectedRelatedEntity.entityType).includes('TIME_PRIMITIVE')">
+                        <input  type="text" name="timePrimitiveTo__{{rowModel.id}}"
+                                ng-model="rowModel.timePrimitive.to" placeholder="Until Date"
+                                ng-change="loadRelatedEntitiesAndRelationsByTarget($event, null, rowModel, rowModel.selectedRelatedEntity, 'relatedToTimePrimitiveChange')"
+
+                                />
+
+                    </md-input-container>
+
+
+                </div>
+
+                <div style="display: flex; margin-top: -17px;">
+
+                    <md-radio-group ng-model="rowModel.booleanValues" layout="row"> 
+                        <md-radio-button
+                            ng-model="rowModel.booleanValues.yes" 
+                            ng-show="rowModel.selectedRelatedEntity != undefined && (rowModel.selectedRelatedEntity.entityType).includes('BOOLEAN')"
+                            ng-change="loadRelatedEntitiesAndRelationsByTarget($event, null, rowModel, rowModel.selectedRelatedEntity, 'relatedBooleanYes')"
+                            ng-value="true" class="md-primary">Yes
+                        </md-radio-button>
+                        <md-radio-button
+                            ng-model="rowModel.booleanValues.no"					
+                            ng-show="rowModel.selectedRelatedEntity != undefined && (rowModel.selectedRelatedEntity.entityType).includes('BOOLEAN')"
+                            ng-change="loadRelatedEntitiesAndRelationsByTarget($event, null, rowModel, rowModel.selectedRelatedEntity, 'relatedBooleanNo')"
+                            ng-value="false" class="md-primary">No
+                        </md-radio-button>
+                    </md-radio-group>
+
+
+
+                </div>
+
+                <md-input-container style="margin:0; padding:2px; margin-top:-17px;">
+                    <label>From Date</label>
+                    <md-datepicker name="fromDateInput_{{rowModel.id}}" 
+                                   ng-model="rowModel.rangeOfDates.from" 
+                                   ng-show="rowModel.selectedRelatedEntity != undefined && (rowModel.selectedRelatedEntity.entityType).includes('TEMPORAL')"
+                                   ng-change="loadRelatedEntitiesAndRelationsByTarget($event, parent.rowModel, rowModel, rowModel.selectedRelatedEntity, 'relatedFromDateChange')"/>
+                    <div ng-messages="searchForm['fromDateInput_' + rowModel.id].$error">
+                        <div ng-message="valid">Please enter some date</div>
+                    </div>
+                </md-input-container>
+                <md-input-container style="margin:0; padding:2px;" class="shrinked">
+                    <label>Until Date</label>
+                    <md-datepicker name="untilDateInput_{{rowModel.id}}" 
+                                   ng-model="rowModel.rangeOfDates.until"
+                                   ng-show="rowModel.selectedRelatedEntity != undefined && (rowModel.selectedRelatedEntity.entityType).includes('TEMPORAL')"
+                                   ng-change="loadRelatedEntitiesAndRelationsByTarget($event, parent.rowModel, rowModel, rowModel.selectedRelatedEntity, 'relatedUntilDateChange')"/>
+                    <div ng-messages="searchForm['untilDateInput_' + rowModel.id].$error">
+                        <div ng-message="valid">Please enter some date</div>
+                    </div>
+                </md-input-container> 
+
+                <md-input-container class="md-block shrinked" style="margin:0;
+                                    padding:0;
+                                    padding-left:8px;">
+                    <div layout="row">
+                        <!--div ng-show="rowModel.allRelatedSearchResultsIsSelected">
+                                <md-chips readonly="true" ng-model="rowModel.allRelatedEntitiesSelectedList" md-removable="false"
+                                        md-enable-chip-edit="false" md-on-remove="unselectAllRelatedSearchResults(rowModel);"
+                                        class="shrinked-selected-instance colorful" style="padding:0;">
+                                        <md-chip-template>
+                                                <span style="font-size:14px;">
+                                                        {{$chip.name}}
+                                                </span>
+                                        </md-chip-template>
+                                </md-chips>
+                        </div-->
+                        <span flex></span>
+
+                    </div>
+                </md-input-container>
+
+            </md-content>
+
+        </div>
+
+        <!-- Related entity's search results -->
+        <div layout="column" ng-show="rowModel.shownEntitySearchResults"
+             class="searchResultsRelatedEntityInit transformWidth" ng-class="rowModel.activeRowModelStyle">
+
+            <md-toolbar class="md-primary narrow-toolbar">
+                <div class="md-toolbar-tools" layout-align="start center">
+                    <h2>Search Results</h2>
+                </div>
+            </md-toolbar>
+
+            <md-list class="md-dense" style="margin-top:5px;overflow: auto;" flex>
+
+                <md-list-item class="md-2-line md-long-text slide-fade showListItem" ng-show="item != null"
+                              ng-repeat="item in rowModel.selectedRelatedInstanceList">
+                    <div class="md-list-item-text">
+                        <span ng-repeat="(key,val) in item" class="ng-binding">
+                            <span
+                                ng-if="key != 'isChecked' && key != 'uri' && key != 'north' && key != 'south' && key != 'west' && key != 'east'">
+                                <h3 ng-if="$first">
+                                    {{val.value}}
+                                </h3>
+                                <p ng-if="!$first" style="font-style: italic;">
+                                    {{val.value}}
+                                </p>
+                            </span>
+                        </span>
+                        <md-icon class="md-secondary" ng-click="removeSelectedRelatedItem($event, rowModel, $index)"
+                                 aria-label="Chat" md-font-icon="fa fa-times" style="font-size:24px;">
+                        </md-icon>
+                    </div>
+
+                    <md-divider></md-divider>
+
+                </md-list-item>
+
+            </md-list>
+        </div>
+
+        <!-- Region Set -->
+        <div layout="column" ng-show="rowModel.boundingBox && !rowModel.shownEntitySearchResults"
+             class="searchResultsRelatedEntityInit transformWidth" ng-class="rowModel.activeRowModelStyle">
+
+            <md-toolbar class="md-primary narrow-toolbar">
+                <div class="md-toolbar-tools" layout-align="start center">
+                    <h2>Region Set</h2>
+                </div>
+            </md-toolbar>
+            <div ng-show="rowModel.boundingBoxResultsCount < 1">
+                <i>
+                    Marked Region containing
+                    <code>no</code>
+                    pin(s) has been set
+                </i>
+            </div>
+            <div ng-show="rowModel.boundingBoxResultsCount == 1">
+                <i>
+                    Marked Region containing
+                    <code
+                        style="color:#106CC8;background: rgba(0,0,0,0.065);">{{rowModel.boundingBoxResultsCount}}</code>
+                    pin has been set
+                </i>
+            </div>
+            <div ng-show="rowModel.boundingBoxResultsCount > 1">
+                <i>
+                    Marked Region containing
+                    <code
+                        style="color:#106CC8;background: rgba(0,0,0,0.065);">{{rowModel.boundingBoxResultsCount}}</code>
+                    pins has been set
+                </i>
+            </div>
+        </div>
+
+        <div style="z-index:2" 
+             ng-class="rowModel.activeRowModelStyle">
+            <md-button aria-label="Remove Filter" class="md-icon-button"
+                       ng-click="(!($first && $last) || parent.rowModel != null) ? removeRowModel(outerIndex, parent.rowModel) : deactivaeRowModel(outerIndex, rowModel)" 
+                       style="margin-left:-50px;">
+                <md-icon md-font-icon="fa fa-times" style="color:rgba(255,255,255,0.87); font-size:24px;"></md-icon>
+            </md-button>
+        </div>
+
+    </div>
+
+    <div>
+        <div style="height:52px; padding-top:12px;" class="zoom-show-hide"
+             ng-show="configuration.wholeTreeModel.levelLimit == - 1 || configuration.wholeTreeModel.levelLimit > rowModel.level"
+             ng-cloak>
+            <!-- ng-class="rowModel.activeStyle" -->
+            <div class="lock-size zoom-show-hide" ng-show="rowModel.rowModelList.length == 0" flex>
+                <md-button class="md-fab md-mini md-primary animate-show animate-hide"
+                           aria-label="Add Filter on Related Entity" ng-click="addFilterOnRelated(parent.rowModel, rowModel)"
+                           ng-disabled="rowModel.selectedRelatedEntity == null || rowModel.selectedRelation == null">
+                    <md-icon md-font-icon="fa fa-level-down" style="font-size:24px"></md-icon>
+                </md-button>
+                <md-tooltip ng-show="rowModel.selectedRelatedEntity == null && rowModel.selectedRelation == null"
+                            md-delay="1000" md-direction="top">
+                    Select some related entity and relation first
+                </md-tooltip>
+                <md-tooltip ng-show="rowModel.selectedRelatedEntity == null && rowModel.selectedRelation != null"
+                            md-delay="1000" md-direction="top">
+                    Select some related entity first
+                </md-tooltip>
+                <md-tooltip ng-show="rowModel.selectedRelatedEntity != null && rowModel.selectedRelation == null"
+                            md-delay="1000" md-direction="top">
+                    Select some relation first
+                </md-tooltip>
+
+                <md-tooltip ng-show="rowModel.selectedRelatedEntity != null && rowModel.selectedRelation != null"
+                            md-delay="1000" md-direction="top">
+                    Add a filter on entity {{rowModel.selectedRelatedEntity.name}}
+                </md-tooltip>
+            </div>
+        </div>
+        <div style="height:180px;" class="zoom-show-hide"
+             ng-show="configuration.everyRowModel.degreeLimit >= rowModel.rowModelList.length">
+            <div ng-class="rowModel.activeRowModelStyle" ng-show="rowModel.rowModelList.length > 0"
+                 class="zoom-show-hide">
+
+                <md-fab-speed-dial ng-show="rowModel.activeRowModelStyle == 'enabled-style'" md-open="false"
+                                   md-direction="down" ng-class="targetSpeedDialMode" style="margin-top:51px">
+                    <md-fab-trigger>
+                        <md-button aria-label="menu" class="md-fab green-button"
+                                   ng-disabled="rowModel.activeRowModelStyle == 'disabled-style'">
+                            <md-icon md-font-icon="fa fa-plus" style="font-size:24px"></md-icon>
+                        </md-button>
+                    </md-fab-trigger>
+
+                    <md-fab-actions ng-hide="rowModel.activeRowModelStyle == 'disabled-style'"
+                                    ng-repeat="filterExpression in rowModel.availableFilterExpressions">
+                        <md-button aria-label="Any of the folowing" class="md-fab md-primary md-raised md-mini"
+                                   style="background-color: rgb(179, 174, 176);"
+                                   ng-click="addNewEmptyRowModel(rowModel, filterExpression.expression)">
+                            {{filterExpression.expression}}
+                        </md-button>
+                    </md-fab-actions>
+                    <md-tooltip md-delay="1000" md-direction="top">
+                        Add a new filter on entity "{{rowModel.selectedRelatedEntity.name}}"
+                    </md-tooltip>
+                </md-fab-speed-dial>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div>
+    <md-list flex>
+        <md-list-item ng-repeat="rowModel in rowModel.rowModelList track by $index" ng-init="outerIndex = $index"
+                      style="padding:10px 0; padding-left:70px;" class="showListItem"
+                      ng-class="{leftLined: parent.rowModel != null}">
+            <div layout="column" ng-include="'../aqub/views/rowTemplate.html'" onload="parent = $parent"></div>
+            <!--<row-template/>-->
+        </md-list-item>
+    </md-list>
+</div>

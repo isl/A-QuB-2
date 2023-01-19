@@ -1,0 +1,836 @@
+/************** tags-input CSS*******************/
+
+tags-input .tags .tag-item {
+    
+background-color: #5bc0de !important;
+border-color: #42bd41 !important;
+color: #fff !important;
+background: #72d572 !important;   
+  margin: 2px;
+  padding: 0 5px;
+  display: inline-block;
+  float: left;
+  font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  height: 26px;
+  line-height: 25px;
+  /*border: 1px solid #acacac;*/
+  /*background: linear-gradient(to bottom, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);*/
+  border-radius: 3px;
+}
+tags-input .tags .tag-item.selected {
+  background: #ff4081 !important;
+}
+
+/* Overwriting Border Radius of $uibModal (Bootstrap's Modal) */
+.modal-content  {
+    -webkit-border-radius: 5px !important;
+    -moz-border-radius: 5px !important;
+    border-radius: 5px !important;
+}
+
+/*******************user defined css **********************/
+.radioclass{
+ font-weight: normal;   
+}
+
+.inside
+{
+ display: inline-block;
+ /*margin: 17px 0px 0px -7px;*/ 
+ vertical-align: top;
+}
+.row {
+    display: table;
+    width: 100%; /*Optional*/
+    table-layout: fixed; /*Optional*/
+    border-spacing: 10px; /*Optional*/
+}
+.column {
+    display: table-cell;
+}
+
+.justified
+{
+text-align: justify;
+text-justify: inter-word;
+}
+
+/* Creating new alert types for bootstrap*/
+.alert-success-funky {
+    background-color: #B2FF59;
+    border-color: #345d04;
+    color: #345d04;
+}
+.alert-warning-funky {
+    background-color: #FFB74D;
+    border-color: #fffafc;
+    color: #fffafc;
+}
+
+.alert-danger-funky {
+    background-color: #EF9A9A;
+    border-color: #870000;
+    color: #870000;
+}
+
+.slim {
+	line-height: normal !important;
+	margin: 0 !important;
+	min-height: 0 !important;
+}
+
+/*
+NEW
+*/
+
+.card-media { /* not used */
+  	background-color: #999999;
+}
+
+
+/* Eliminating error spaces for "Search" */
+md-input-container.md-block.eliminate-error-spacer-for-search-vres:after {
+	display: inline-block;
+}
+.eliminate-error-spacer-for-search-vres:after {
+	display: inline-block;
+}
+
+/* Mockups */
+
+.card {
+  background: #fff;
+  border-radius: 2px;
+  display: inline-block;
+  height: 275px;
+  padding:5px;
+  margin:10px;
+  position: relative;
+}
+
+/*
+.card-3 {
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+*/
+
+/* Remove md-container error space below */
+md-input-container .md-errors-spacer {
+    display: none;
+}
+
+/* Remove after space by using "shrinked" custom class */
+md-input-container.md-block.shrinked:after {
+    display: none;
+}
+
+/* remove after space by using "shrinked" custom class */
+md-input-container.shrinked md-chips-wrap.md-chips.md-readonly.md-removable:after {
+	display: block;
+}
+
+/* Remove line below the chip by using "shrinked" custom class*/
+md-input-container.shrinked md-chips-wrap.md-chips.md-readonly.md-removable {
+	box-shadow: none;
+}
+
+/* Custom color for chips */
+md-chips.colorful md-chip {
+	/*background:#ff4081;*/
+	/*background: rgba(255, 64, 129, 0.56);*/
+	background: rgba(0, 200, 83, 0.61);
+}
+
+/* remove after space by using "shrinked" custom class */
+md-chips.shrinked md-chips-wrap.md-chips:after {
+	display: block;
+}
+
+/* remove after space by using "shrinked" custom class */
+md-chips.shrinked md-chips-wrap.md-chips {
+	overflow: auto;
+	max-height: 100px;
+	margin-left:8px;
+	max-width:210px;
+}
+
+md-chips.shrinked-alterned md-chips-wrap.md-chips:after {
+	display: block;
+}
+
+md-chips.shrinked-alterned md-chips-wrap.md-chips {
+	max-width:210px;
+}
+
+md-chips.shrinked-selected-instance md-chips-wrap.md-chips:after {
+	display: block;
+}
+
+md-chips.shrinked-selected-instance md-chips-wrap.md-chips {
+	max-width:210px;
+	padding:0;
+}
+
+md-input-container.md-block.shrinked {
+	margin-bottom:0;
+}
+
+/* Remove after space by using "shrinked" custom class */
+md-input-container.shrinked._md-datepicker-floating-label:after {
+    display: none;
+}
+
+.autocomplete-with-icon md-autocomplete-wrap:after {
+  font-family: "FontAwesome";
+  content: "\f002";
+  line-height: 1;
+  font-size: 16px;
+  font-weight: normal;
+  color: rgba(0,0,0,0.54);
+  padding: 8px 10px 10px 8px;
+}
+
+md-autocomplete.shrinked input.ng-scope {
+	width:150px;
+}
+
+
+/* Moving tooltip closer by using "closerTooltip" custom class*/
+.closerTooltip16.md-tooltip {
+	margin-top: 0px !important;
+    margin-left: 16px !important;
+}
+
+/* Custom button colors */
+.green-button.md-button.md-fab {
+	background-color: #00c853;
+}
+.green-button.md-button.md-fab:not([disabled]):hover {
+	background-color: #009624;
+	color: white;
+}
+.green-button.md-button.md-fab[disabled] {
+  color : rgb(187, 187, 187);
+  background-color: rgba(230, 230, 229, 0.96);
+}
+
+.blue-button.md-button.md-fab {
+	background-color: #3f51b5;
+}
+.blue-button.md-button.md-fab:not([disabled]):hover {
+	background-color: #2b387c;
+	color: white;
+}
+.blue-button.md-button.md-fab[disabled] {
+  color : rgb(187, 187, 187);
+  background-color: rgba(230, 230, 229, 0.96);
+}
+
+.teal-button.md-button.md-fab {
+	background-color: #009688;
+}
+.green-button.md-button.md-fab:not([disabled]):hover {
+	background-color: #00796B;
+	color: white;
+}
+.green-button.md-button.md-fab[disabled] {
+  color : rgb(187, 187, 187);
+  background-color: rgba(230, 230, 229, 0.96);
+}
+
+
+/* Hide - Show */
+
+/* when hiding the thing */
+
+.hideLeft.ng-hide-add { 
+  -webkit-animation:0.5s lightSpeedOut ease; 
+  animation:0.5s lightSpeedOut ease; 
+}
+
+/* when showing the thing */
+.flipShow.ng-hide-remove      { 
+  -webkit-animation:0.5s flipInX ease; 
+  animation:0.5s flipInX ease; 
+}
+
+/* ANIMATIONS (FROM ANIMATE.CSS) */
+
+/* flip in */
+@-webkit-keyframes flipInX {
+  0% {
+    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+    transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+    -webkit-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
+    opacity: 0;
+  }
+
+  40% {
+    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+    transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+    -webkit-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
+  }
+
+  60% {
+    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+    transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+    opacity: 1;
+  }
+
+  80% {
+    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+    transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+  }
+
+  100% {
+    -webkit-transform: perspective(400px);
+    transform: perspective(400px);
+  }
+}
+
+@keyframes flipInX {
+  0% {
+    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+    -ms-transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+    transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+    -webkit-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
+    opacity: 0;
+  }
+
+  40% {
+    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+    -ms-transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+    transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+    -webkit-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
+  }
+
+  60% {
+    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+    -ms-transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+    transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+    opacity: 1;
+  }
+
+  80% {
+    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+    -ms-transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+    transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+  }
+
+  100% {
+    -webkit-transform: perspective(400px);
+    -ms-transform: perspective(400px);
+    transform: perspective(400px);
+  }
+}
+
+/* light speed out */
+@-webkit-keyframes lightSpeedOut {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    -webkit-transform: translate3d(100%, 0, 0) skewX(30deg);
+    transform: translate3d(100%, 0, 0) skewX(30deg);
+    opacity: 0;
+  }
+}
+
+@keyframes lightSpeedOut {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    -webkit-transform: translate3d(100%, 0, 0) skewX(30deg);
+    -ms-transform: translate3d(100%, 0, 0) skewX(30deg);
+    transform: translate3d(100%, 0, 0) skewX(30deg);
+    opacity: 0;
+  }
+}
+
+/*  */
+.showListItem {
+}
+.showListItem.ng-enter {
+    opacity: 0;
+    transition: all 1.2s ease;
+}
+.showListItem.ng-enter-active {
+    opacity: 1;
+}
+
+.showListItem.ng-leave {
+    opacity: 1;
+    transition: all 1s ease;
+}
+.showListItem.ng-leave-active {
+    opacity: 0;
+}
+
+/* Fade in/out when inserting or removing a row*/
+.animate-show,
+.animate-hide {
+	-webkit-transition:all linear 1s;
+	-moz-transition:all linear 1s;
+	-ms-transition:all linear 1s;
+	-o-transition:all linear 1s;
+	transition:all linear 1s;
+}
+
+.animate-show.ng-hide-remove,
+.animate-hide.ng-hide-add.ng-hide-add-active {
+	opacity: 0;
+	display: block !important;
+}
+
+.animate-hide.ng-hide-add,
+.animate-show.ng-hide-remove.ng-hide-remove-active {
+	opacity: 1;
+	display: block !important;
+	transition: all 0.8s ease;
+}
+
+
+
+/* funky-show-hide - Animation*/
+.funky-show-hide.ng-hide-add {
+	transform: rotateZ(0);
+	transform-origin: right;
+	transition: all 0.5s ease-in-out;
+}
+
+.funky-show-hide.ng-hide-add.ng-hide-add-active {
+	transform: rotateZ(-135deg);
+}
+
+.funky-show-hide.ng-hide-remove {
+	transform: rotateY(90deg);
+	transform-origin: left;
+	transition: all 0.5s ease;
+}
+
+.funky-show-hide.ng-hide-remove.ng-hide-remove-active {
+	transform: rotateY(0);
+}
+
+/* zoom-show-hide - Animation*/
+.zoom-show-hide.ng-hide-add {
+  	-webkit-transition:all 0.5s ease-in-out;
+	-moz-transition:all 0.5s ease-in-out;
+	-ms-transition:all 0.5s ease-in-out;
+	-o-transition:all 0.5s ease-in-out;
+	transition:all 0.5s ease-in-out;
+}
+
+.zoom-show-hide.ng-hide-add.ng-hide-add-active {
+	-webkit-transform: scale(0);
+	-ms-transform: scale(0);
+	transform: scale(0);
+}
+
+.zoom-show-hide.ng-hide-remove {
+	transform: scale(0.1);
+	-webkit-transition:all 0.5s ease-in-out;
+	-moz-transition:all 0.5s ease-in-out;
+	-ms-transition:all 0.5s ease-in-out;
+	-o-transition:all 0.5s ease-in-out;
+	transition:all 0.5s ease-in-out;
+}
+
+.zoom-show-hide.ng-hide-remove.ng-hide-remove-active {
+	-webkit-transform: scale(1);
+	-ms-transform: scale(1);
+	transform: scale(1);
+}
+
+/* transform-height - Animation*/
+.transform-height {
+	max-height:200px;
+	overflow: hidden;
+	-webkit-transition-property: max-height, opacity;
+   -moz-transition-property: max-height, opacity;
+   -o-transition-property: max-height, opacity;
+   transition-property: max-height, opacity;
+  -webkit-transition-duration: 100ms;
+   -moz-transition-duration: 100ms;
+   -o-transition-duration: 100ms;
+   transition-duration: 100ms;
+}
+
+.transform-height.ng-hide-add, 
+.transform-height.ng-hide-remove {
+  max-height: 200px;
+}
+
+.transform-height.ng-hide {
+	max-height: 0;
+	opacity: 0;
+}
+
+
+/* Animation when hiding search results of related entity */ 
+.transformWidth {
+	-webkit-transition: width 1s ease-out; 
+	-moz-transition: width 1s ease-out; 
+	-ms-transition: width 1s ease-out; 
+  	-o-transition: width 1s ease-out; 
+	transition: width 1s ease-out;
+}
+
+/* changes width */
+.transformWidth.ng-hide  {
+	width: 0px;
+}
+
+/* Initial size */
+.searchResultsRelatedEntityInit{
+	height:290px; 
+	width:220px;
+}
+
+/* Changes opacity */
+.transformWidth.ng-hide-remove,
+.transformWidth.ng-hide-add.ng-hide-add-active {
+	opacity: 0;
+}
+
+.transformWidth.ng-hide-add,
+.transformWidth.ng-hide-remove.ng-hide-remove-active {
+	opacity: 1;
+	-webkit-transition: width 1s ease-out; 
+	-moz-transition: width 1s ease-out; 
+	-ms-transition: width 1s ease-out; 
+  	-o-transition: width 1s ease-out; 
+	transition: all 1s ease;
+}
+
+/* Look and feel disabled or enabled for whole div */
+
+.disabled-style {
+	opacity: 0.5;
+	pointer-events: none;
+	> * {
+		opacity: 0.5;
+		pointer-events: none;
+	}
+}
+
+.enabled-style {
+	opacity: 1;
+	pointer-events: auto;
+	> * {
+		opacity: 1;
+		pointer-events: auto;
+	}
+}
+
+/* Look and feel sidenav or sticky for results */
+.results-sidenav-style {
+	margin-top:30px;
+	min-width: 50%;
+    width: 50%;
+}
+
+.results-sticky-style {
+	position: fixed;
+	min-width: 40%;
+        width: 40%;
+}
+
+/* --- material checkbox and radio for bootswatch --- */
+
+.material-like-checkbox span.ivh-treeview-node-label.ng-binding.ivh-treeview-toggle {
+    padding-left: 15px;
+}
+
+input[type="checkbox"] {
+    margin: 4px 0 0;
+}
+
+.material-like-checkbox input[type="checkbox"]:after, .checkbox-inline input[type="checkbox"]:after {
+    border: 2px solid;
+    border-radius: 2px;
+    content: '';
+    display: block;
+    height: 18px;
+    transition: 240ms;
+    width: 18px;
+}
+
+.material-like-checkbox input[type="checkbox"]:checked:before, .checkbox-inline input[type="checkbox"]:checked:before {
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    position: absolute;
+    left: 6px;
+    top: 0;
+    display: table;
+    width: 6px;
+    height: 12px;
+    border: 2px solid #fff;
+    border-top: 0;
+    border-left: 0;
+    content: '';
+}
+
+.material-like-checkbox input[type="checkbox"]:checked:after, .checkbox-inline input[type="checkbox"]:checked:after {
+    background-color: #0c84e4;
+    border-color: #0c84e4;
+}
+
+.material-like-checkbox input[type="checkbox"]:disabled:checked:after, .checkbox-inline input[type="checkbox"]:disabled:checked:after {
+    background-color: rgba(0, 0, 0, 0.26);
+    border-color: transparent;
+}
+
+/* --- material-like checkbox Style - Start --- */
+
+.checkbox span.ivh-treeview-node-label.ng-binding.ivh-treeview-toggle {
+    padding-left: 22px;
+    line-height: 2.2;
+}
+
+.checkbox input[type="checkbox"] {
+    margin: 4px 0 2px;
+    margin-left:-5px !important;
+}
+
+.checkbox input[type="checkbox"], .checkbox-inline input[type="checkbox"] {
+    -webkit-appearance: none;
+}
+
+.checkbox input[type="checkbox"]:after, .checkbox-inline input[type="checkbox"]:after {
+    border-color: rgba(0, 0, 0, 0.54);
+}
+
+.checkbox input[type="checkbox"]:disabled:after, .checkbox-inline input[type="checkbox"]:disabled:after {
+    border-color: rgba(0, 0, 0, 0.26);
+}
+
+.checkbox input[type="checkbox"]:focus, .checkbox-inline input[type="checkbox"]:focus {
+    outline: none;
+}
+
+
+.checkbox input[type="checkbox"]:after, .checkbox-inline input[type="checkbox"]:after {
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 2px;
+    content: '';
+    display: block;
+    height: 20px;
+    transition: 240ms;
+    width: 20px;
+}
+
+.checkbox input[type="checkbox"]:checked:before, .checkbox-inline input[type="checkbox"]:checked:before {
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    position: absolute;
+    right: 7px;
+    bottom: 5px;
+    display: block;
+    width: 6.66667px;
+    height: 13.33333px;
+    border: 2px solid rgba(255,255,255,0.87);
+    border-top: 0;
+    border-left: 0;
+    content: '';
+}
+
+.checkbox input[type="checkbox"]:checked:after, .checkbox-inline input[type="checkbox"]:checked:after {
+    background-color: rgba(255,64,129,0.87);
+    border-color: rgba(255,64,129,0);
+}
+
+.checkbox input[type="checkbox"]:disabled:checked:after, .checkbox-inline input[type="checkbox"]:disabled:checked:after {
+    background-color: rgba(0, 0, 0, 0.26);
+    border-color: transparent;
+}
+
+/* --- material-like checkbox Style - End --- */
+
+/* Style for ng-Santize used for htmlContent on dialogs */
+.blueCodeStyle {
+	color:#106CC8; 
+	background:rgba(0,0,0,0.065);
+}
+
+/* Vertical line on the left of a child rowModel  */
+/*.leftLined div.lock-size.layout-align-center-center {*/
+.leftLined div.ng-scope.layout-column {
+	/*border-left-style: solid;*/
+	border-left: 2px solid rgb(204, 204, 204);
+}
+
+
+
+
+/* geocode style */
+
+.customGeocoder div.ol-geocoder.gcd-gl-container {
+	top: 64px;
+}
+
+.customGeocoder button.gcd-gl-btn {
+	background-position-x: 52%;
+    background-position-y: 40%;
+    height: 1.37em;
+    width: 1.37em;
+    top: 2px;
+    left: 2px;
+    background-size: 18px 18px;
+    background-image: url(../images/search.svg);
+}
+
+.customGeocoder input.gcd-gl-input {
+	top: 3px;
+	left: 35px;
+	height:22px;
+}
+
+.customGeocoder div.gcd-gl-control.ol-control {
+	min-width: 28px;
+	height: 28px;
+}
+
+.customGeocoder ul.gcd-gl-result{
+	font-size: 16px;
+	/*top: 2.58em !important;*/
+}
+.customGeocoder li {
+	line-height: 1.875rem !important;
+}
+.customGeocoder ul.gcd-gl-result>li:nth-child(odd) {
+	background-color: #eeeeee !important;
+}
+
+/* For touchscreen */
+.customGeocoder .ol-touch .ol-control button {
+    font-size: 15.93px;
+}
+
+/* Makes toolbar a little more narrow */
+.narrow-toolbar {
+	height: 40px;
+    min-height: 40px;
+}
+
+/* Full Screen for dialog */
+.full-screen-dialog {
+	max-height: 100%;
+    max-width: 100%;
+    height: inherit;
+}
+
+.non-full-screen-dialog {
+	max-width: 80%;
+    max-height: 80%;
+    height: auto;
+}
+
+/* Making code-mirror occupying the whole container */
+.CodeMirror.cm-s-default.CodeMirror-wrap { height: 100%; }
+
+
+
+.boundingBoxInQuery {
+	top: 100px;
+	left: 7px;
+}
+
+.clearBoundingBoxInQuery {
+	top: 130px;
+	left: 7px;
+}
+
+.clearSelectedPinsInQuery {
+	top: 160px;
+	left: 7px;
+}
+
+/* Disable hovering for this div when the child button is disabled */ 
+div.clearBoundingBoxInQuery.ol-unselectable.ol-control {
+  background-color: rgba(255,255,255,.4);
+}
+
+.clearBoundingBoxInQuery button:disabled {
+  opacity: 0.65; 
+  cursor: not-allowed;
+  pointer-events: none !important;
+}
+
+.clearBoundingBoxInQuery button:enabled {
+  opacity: 1; 
+  cursor: allowed;
+  pointer-events: all !important;
+}
+
+/* Disable hovering for this div when the child button is disabled */ 
+div.clearSelectedPinsInQuery.ol-unselectable.ol-control {
+  background-color: rgba(255,255,255,.4);
+}
+
+.clearSelectedPinsInQuery button:disabled {
+  opacity: 0.65; 
+  cursor: not-allowed;
+  pointer-events: none !important;
+}
+
+.clearSelectedPinsInQuery button:enabled {
+  opacity: 1; 
+  cursor: allowed;
+  pointer-events: all !important;
+}
+
+button.withHover.md-icon-button:hover:enabled > md-icon{
+  color: rgb(63, 81, 181);
+}
+
+/* z-index fix for progress bar of each file */
+div.dz-progress {
+	z-index:10 !important;
+}
+
+/* Speech Bubble */
+.triangle-isosceles {
+	position:relative;
+	padding:15px;
+	/*margin:1em 0 3em;*/
+	margin-bottom: 5px;
+	color:#000;
+	background:rgba(0,0,0,0.87); /* default background for browsers without gradient support */
+	color: rgb(250,250,250);
+	/* css3 */
+	-webkit-border-radius:10px;
+	-moz-border-radius:10px;
+	border-radius:10px;
+}
+
+/* creates triangle */
+.triangle-isosceles:after {
+  content:"";
+  position:absolute;
+  bottom:-15px; /* value = - border-top-width - border-bottom-width */
+  left:40px; /* controls horizontal position */
+  border-width:15px 15px 0; /* vary these values to change the angle of the vertex */
+  border-style:solid;
+  border-color:rgba(0,0,0,0.87) transparent;
+  /* reduce the damage in FF3.0 */
+  display:block;
+  width:0;
+}
+
+/* toast themes */
+md-toast.md-important-toast-theme .md-toast-content {
+	background-color: #ff9900;
+}
+
+.side-tree{
+	height: 70vh !important;
+}

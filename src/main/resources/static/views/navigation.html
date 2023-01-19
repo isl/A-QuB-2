@@ -1,0 +1,664 @@
+<div class="section" style="padding:5px 20px;" ng-cloak>
+
+	<!-- Favorite changed: {{currentFavorite.changed}} -->
+	<div class="row">
+		<div class="column inside" style="width:100%">
+
+			<md-toolbar class="md-primary">
+				<div class="md-toolbar-tools">
+
+
+
+					<md-icon md-font-icon="fa fa-search" style="font-size:36px; padding-right:10px;"/>
+					<h2 class="md-flex" flex>{{headingTitle}}</h2>
+					<h2 ng-show="currentFavorite.itIsFavorite"> {{favoriteTitle}} </h2>
+
+					<div ng-show="!searchForm.$invalid" class="zoom-show-hide">
+						<md-button ng-click="observeSparql($event)" 
+                                   class="md-icon-button" 
+                                   aria-label="Observe Sparql">
+							<img src="/aqub/images/SPARQL_ICON.png" alt="SPARQL_ICON" height="28">
+								<md-tooltip md-delay="1000" md-direction="top">
+                                Observe SPARQL Query
+								</md-tooltip>
+							</md-button>
+						</div>
+						<div class="zoom-show-hide" ng-hide="treeMenuIsOpen">
+							<!-- 
+                                This md-button used to have the ng-hide (not its div container)
+                                along with a animation class 'hideLeft' 
+                        -->
+							<md-button ng-click="toggleTreeMenu();" 
+                                   class="md-fab md-mini" 
+                                   aria-label="Show menu">
+								<md-icon md-font-icon="fa fa-bars" style="font-size:20px;"/>
+								<md-tooltip md-delay="1000" md-direction="top">
+                                Show menu
+								</md-tooltip>
+							</md-button>
+						</div>
+
+						<div>
+							<span ng-show="hasRoleOfAdministrator || hasRoleOfResearcher || hasRoleOfOperator">
+								<md-button ng-click="showFavoriteDialog($event)" ng-show="!currentFavorite.itIsFavorite" class="md-icon-button" aria-label="Favorites">
+									<md-icon md-font-icon="fa fa-star-o" style="font-size:28px;">
+										<md-tooltip md-delay="1000" md-direction="top">
+                                        Add into favorites
+										</md-tooltip>
+									</md-button>
+									<md-button ng-click="removeCurrentQueryModelFromFavorites($event);" ng-show="currentFavorite.itIsFavorite && !currentFavorite.changed" class="md-icon-button" aria-label="Favorites">
+										<md-icon md-font-icon="fa fa-star" style="font-size:28px;">
+											<md-tooltip md-delay="1000" md-direction="top">
+                                        Remove from favorites
+											</md-tooltip>
+										</md-button>
+
+										<md-button ng-click="saveIntoFavorites();" ng-show="currentFavorite.itIsFavorite && currentFavorite.changed" class="md-icon-button" aria-label="Favorites">
+											<md-icon md-font-icon="fa fa-star" style="font-size:28px; color:rgb(255,64,129);;">
+												<md-tooltip md-delay="1000" md-direction="top">
+                                        Save favorite model, updating the current one
+												</md-tooltip>
+											</md-button>
+										</span>
+										<md-button ng-click="openConfigurationDialog($event)" class="md-icon-button" aria-label="Show Help">
+											<md-icon md-font-icon="fa fa-cogs" style="font-size:28px;">
+												<md-tooltip md-delay="1000" md-direction="top">
+                                    Configuration Control
+												</md-tooltip>
+											</md-button>
+
+											<md-button ng-click="toggleInfo()" class="md-icon-button" aria-label="Show Help">
+												<!-- <md-icon md-font-icon="fa fa-info-circle" style="font-size:28px;"></md-icon> -->
+												<md-icon md-font-icon="fa fa-question-circle" style="font-size:28px;">
+													<md-tooltip md-delay="1000" md-direction="top">
+                                    Help
+													</md-tooltip>
+												</md-button>
+											</div>
+										</div>
+									</md-toolbar>
+
+									<md-backdrop ng-show="infoNavIsOpen" 
+                         class="md-opaque"
+                         ng-cloak/>
+
+									<md-sidenav class="md-sidenav-right" 
+                        md-component-id="rightInfo"
+                        md-whiteframe="4"
+                        md-disable-backdrop
+                        style="margin-top:79px; max-width:500px; width:400px">
+
+										<md-toolbar class="md-accent">
+											<div class="md-toolbar-tools">
+												<md-button class="md-icon-button" aria-label="Hide Help" ng-click="toggleInfo()">
+													<md-icon md-font-icon="fa fa-chevron-circle-right" style="font-size:24px"/>
+												</md-button>
+
+												<h2 class="md-flex">Help</h2>
+												<span flex/>
+												<!-- <md-icon md-font-icon="fa fa-info" style="font-size:24px;"></md-icon>-->
+												<md-icon md-font-icon="fa fa-question" style="font-size:24px;"/>
+											</div>
+										</md-toolbar>
+
+										<md-content layout-margin>
+											<p>
+												<div ng-include="'views/info/queryBuilderHelp.html'"/>
+											</p>
+
+											<div layout="row">
+												<md-button ng-click="toggleInfo()" class="md-accent">
+                            Close this Sidenav
+												</md-button>
+												<span flex/>
+											</div>
+										</md-content>
+
+									</md-sidenav>
+
+									<md-content id="mainContent" flex layout-padding style="overflow:visible;" layout="column">
+
+										<form ng-submit="$event.preventDefault()" name="searchForm">
+
+											<!-- Breadcrumb -->
+											<!--
+                    <ul id="breadcrumb"> 
+                            <li ng-repeat="item in breadcrumbItems">
+                                    <a href="" ng-if="$first" ng-click="goToHomeView()">
+                                            <span class="fa fa-home"></span>
+                                    </a>
+                                    <a href="" ng-if="!$first" ng-click="testBreadcrumb(headingTitle)">
+                                            <span class="{{item.icon}}"></span> 
+                                            {{item.label}}
+                                    </a>
+                            </li>
+                    </ul>
+                    -->
+
+
+											<span layout="row">
+
+												<md-backdrop ng-show="treeMenuIsOpen" 
+                                     class="md-opaque"
+                                     ng-cloak/>
+
+												<!-- Side tree -->
+												<md-sidenav class="md-sidenav-right side-tree" 
+                                    md-component-id="treeMenu" 
+                                    md-disable-backdrop
+                                    md-whiteframe="3">
+													<!-- md-disable-backdrop  -->
+													<md-toolbar class="md-accent">
+														<div class="md-toolbar-tools">
+															<md-button class="md-icon-button" aria-label="Hide Help" 
+                                               ng-click="reLoadEntities($event, queryFrom);">
+																<md-icon md-font-icon="fa fa-chevron-circle-left" style="font-size:24px"/>
+																<md-tooltip md-delay="1000" 
+                                                    md-direction="top">
+                                            Apply changes and hide
+																</md-tooltip>
+															</md-button>
+
+															<h2 class="md-flex">Collections:</h2>
+															<span flex/>
+															<md-icon md-font-icon="fa fa-bars" style="font-size:20px;"/>
+														</div>
+													</md-toolbar>
+
+													<md-content layout-margin>
+
+														<label style="rgba(0,0,0,0.38); text-align: justify;">
+                                    Please check or un-check the collections to be used while constructing the query.
+															<br/>
+														</label>
+
+														<md-input-container class="md-block eliminate-error-spacer-for-search-vres" style="width:200px;">
+															<label>Search Collections</label>
+															<input ng-model="treeVre">
+															</md-input-container>
+
+															<section layout="column" style="margin-bottom:0;">
+
+																<div ivh-treeview="namegraphs" class="checkbox"
+                                         ivh-treeview-filter="treeVre"
+                                         ivh-treeview-on-toggle="awesomeCallback(ivhNode, ivhIsExpanded, ivhTree)"
+                                         ivh-treeview-on-cb-change="namegraphTreeCallback($event, ivhNode, ivhIsSelected, ivhTree)"
+                                         style="margin-bottom:0;">
+																</div>
+
+															</section>
+
+															<md-button ng-click="reLoadEntities($event, queryFrom);" 
+                                           class="md-accent" 
+                                           style="margin-top:0;">
+                                    Apply changes and hide
+															</md-button>
+														</md-content>
+
+													</md-sidenav>
+
+													<section layout-align="center top" layout="row" layout-sm="column" layout-align="center center">
+														<!-- start for top -->
+
+														<div layout="column" 
+                                 style="height:296px; 
+                                 width:300px;
+                                 margin:18px 5px; 
+                                 padding:5px; 
+                                 border: 1px solid #ccc; 
+                                 border-radius: 5px;" 
+                                 layout-wrap>
+															<!-- width:255px; -->
+
+															<md-toolbar class="md-primary narrow-toolbar">
+																<div class="md-toolbar-tools" layout-align="start center">
+																	<h2>Searching for...</h2>
+																</div>
+															</md-toolbar>
+
+															<md-content layout-padding layout-xs style="height: 230px;">
+																<!-- NEW -->
+																<md-input-container class="md-block shrinked">
+																	<label>Select Target Entity</label>
+																	<md-select ng-model="targetModel.selectedTargetEntity" 
+                                                   ng-model-options="{trackBy: '$value.id'}"
+                                                   name="targetEntityInput" 
+                                                   ng-change="loadRelatedEntitiesAndRelationsByTarget($event, null, rowModel, targetModel.selectedTargetEntity, 'targetEntitySelect'); clearFieldsTarget();"
+                                                   required 
+                                                   md-no-asterisk="false">
+																		<md-option ng-show="entity.isVisibleInTarget == true" ng-repeat="entity in targetModel.targetEntities" ng-value="entity" style="height:40px;">
+                                                {{entity.name}} ({{entity.size}})
+																		</md-option>
+																	</md-select>
+																</md-input-container>
+
+																<!--
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                            <label>Search for keyword</label>
+                                            <input name="clientName" ng-model="targetModel.searchTargetKeywords">
+                                            <div ng-messages="targetEntityInput.$error">
+                                                    <div ng-message="required">This is required.</div>
+                                            </div>
+                                    </md-input-container>
+                                    -->
+																<!-- div style="margin-top:-8px;">
+                                        <span style="vertical-align: middle; padding-right: 5px;" ng-show="targetModel.selectedTargetEntity != undefined && (targetModel.selectedTargetEntity.entityType).includes('GEOSPATIAL')">Select Region</span>                                    
+                                        <md-button layout-align="end end" class="withHover md-icon-button" aria-label="Map"
+                                                   ng-click="showMapForRelatedResultsDialog($event, targetModel)" style="margin-left: -9px;"
+                                                   ng-show="targetModel.selectedTargetEntity != undefined && (targetModel.selectedTargetEntity.entityType).includes('GEOSPATIAL')">
+                                            <md-icon md-font-icon="fa fa-globe" style="font-size:24px"></md-icon>
+                                        </md-button>
+                                        <md-tooltip
+                                            ng-show="targetModel.selectedTargetEntity != undefined && (targetModel.selectedTargetEntity.entityType).includes('GEOSPATIAL')"
+                                            md-direction="top" md-delay="1500">
+                                            Restrict search geographically through the map
+                                        </md-tooltip>
+                                    <!-- md-tooltip ng-show="rowModel.selectedRelatedEntity == null" md-delay="1000" md-direction="top">
+                                            Select some related entity first
+                                    </md-tooltip>
+                                    <md-tooltip ng-show="rowModel.selectedRelatedEntity.geospatial == 'FALSE'" md-delay="1000"
+                                            md-direction="top">
+                                            The selected related entity has no geospatial nature
+                                    </md-tooltip-->
+																<!-- /div>
+                                    <div ng-show="rowModel.boundingBox" style="margin-left:-27px; padding-top: 11px;">
+                                        <md-icon md-svg-src="../aqub/images/boundingBox_blue.svg" style="font-size:24px;"></md-icon>
+                                        <md-tooltip md-delay="1000" md-direction="top">
+                                            Geographical bounding box has been set for this related entity
+                                        </md-tooltip>
+                                    </div-->
+
+																<div style="display: flex; margin-top: -10px; margin-left: -6px;">
+																	<md-input-container class="md-block" flex-gt-sm
+                                                            ng-show="targetModel.selectedTargetEntity != undefined && (targetModel.selectedTargetEntity.entityType).includes('NUMERIC')">
+																		<input  type="number" name="numericFrom_{{rowModel.id}}" ng-model="targetModel.numericRange.from"								     
+                                                    placeholder="From"
+                                                    ng-pattern="/^\-?\d+((\.|\,)\d+)?$/"/>
+																		<div
+                                                ng-messages="searchForm['numericFrom_' + rowModel.id].$error">
+																			<div ng-message="pattern">Please enter a valid number</div>
+																		</div>
+																	</md-input-container>
+
+																	<md-input-container class="md-block" flex-gt-sm
+                                                            ng-show="targetModel.selectedTargetEntity != undefined && (targetModel.selectedTargetEntity.entityType).includes('NUMERIC')">
+																		<input type="number" name="numericTo_{{rowModel.id}}" ng-model="targetModel.numericRange.to" 
+                                                   placeholder="To"
+                                                   ng-pattern="/^\-?\d+((\.|\,)\d+)?$/"
+                                                   greater-than = "targetModel.numericRange.from"/>
+																		<div
+                                                ng-messages="searchForm['numericTo_' + rowModel.id].$error">
+																			<div ng-message="pattern">Please enter a valid number</div>
+																			<div ng-message="greaterThan">Equal or greater than from</div>									
+																		</div>
+																	</md-input-container>
+
+																</div>
+
+																<div style="display: flex; margin-top: -10px; margin-left: -6px;">
+																	<md-icon  onclick="window.open('/aqub/timePrimitive_help.html', 'time_primitive', 'left=' + window.screenLeft + ',top=' + window.screenTop + ',width=' + 450 + ',height=' + 580 + ',resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no');" style=" font-size: 20px;" ng-show="rowModel.selectedRelatedEntity != undefined && (rowModel.selectedRelatedEntity.entityType).includes('TIME_PRIMITIVE')" md-font-icon="fa fa-question-circle">
+																	</md-icon>
+																	<md-input-container class="md-block" flex-gt-sm
+                                                            ng-show="targetModel.selectedTargetEntity != undefined && (targetModel.selectedTargetEntity.entityType).includes('TIME_PRIMITIVE')">
+																		<input  type="text" name="timePrimitiveFrom_{{rowModel.id}}" ng-model="targetModel.timePrimitive.from"								     
+                                                    placeholder="From Date"
+                                                    />                                          
+																	</md-input-container>
+
+																	<md-input-container class="md-block" flex-gt-sm
+                                                            ng-show="targetModel.selectedTargetEntity != undefined && (targetModel.selectedTargetEntity.entityType).includes('TIME_PRIMITIVE')">
+																		<input type="text" name="timePrimitiveTo__{{rowModel.id}}" ng-model="targetModel.timePrimitive.to" 
+                                                   placeholder="Until Date"
+
+                                                   />
+
+																	</md-input-container>
+
+																</div>
+
+																<div style="display:flex;margin-top: -20px; margin-left: -6px;">
+																	<md-chips ng-model="targetModel.targetChips" name="chips_{{rowModel.id}}"
+                                                  md-removable="true" 
+                                                  class="shrinked" 
+                                                  md-transform-chip="transformChip($chip)"
+                                                  md-enable-chip-edit="true"
+                                                  md-on-add="loadRelatedEntitiesAndRelationsByTarget($event, null, rowModel, targetModel.selectedTargetEntity, 'targetChipChange'); validateChip($chip,targetModel.targetChips)"
+                                                  md-on-remove="loadRelatedEntitiesAndRelationsByTarget($event, null, rowModel, targetModel.selectedTargetEntity, 'targetChipChange')"
+                                                  md-add-on-blur="true"
+                                                  ng-show="targetModel.selectedTargetEntity != undefined && ((targetModel.selectedTargetEntity.entityType).includes('LITERAL') || (targetModel.selectedTargetEntity.entityType).includes('STRING'))" placeholder="Containing keyword"
+                                                  style="padding:0;">
+																		<md-autocomplete flex layout-xs md-input-name="targetEntityAutocompleteInput"
+                                                             class="shrinked"
+                                                             md-no-cache="true" 
+                                                             md-dropdown-items="5" 
+                                                             md-selected-item="targetModel.selectedTargetRecomentation" 
+                                                             md-search-text="targetModel.searchTargetKeywords"
+                                                             md-selected-item-change="selectedItemChange(item, -1)"
+                                                             md-items="item in querySearch(targetModel.searchTargetKeywords, -1)"
+                                                             md-item-text="item.name"
+                                                             md-min-length="2"
+                                                             ng-show="targetModel.selectedTargetEntity != undefined && ((targetModel.selectedTargetEntity.entityType).includes('LITERAL') || (targetModel.selectedTargetEntity.entityType).includes('STRING'))" placeholder="Containing keyword"
+                                                             placeholder="Containing keyword"
+                                                             ng-focus="loadThesaurus(targetModel.selectedTargetEntity, -1)"
+                                                             style="font-size:14px;">
+																			<!-- class="shrinked autocomplete-with-icon" -->
+																			<!-- md-floating-label="Search for keyword" -->
+																			<span md-highlight-text="searchText">{{item.name}}</span>
+																			<!-- remove until we decide how to fix : konsolak -->
+																			<!-- >md-not-found>
+                                                    No terms matching "{{searchText}}" were found.
+                                                </md-not-found-->
+																		</md-autocomplete>
+																		<div
+                                                ng-messages="searchForm['numericTo_' + rowModel.id].$error">
+																			<div ng-message="pattern">Please enter a valid number</div>
+																			<div ng-message=isGreater3Char>Equal or greater than from</div>									
+																		</div>
+																		<md-chip-template>
+																			<span style="font-size:14px;">
+                                                    {{$chip.name}}
+																			</span>
+																		</md-chip-template>
+
+																	</md-chips>										
+																	<!--  Search not enabled for target at this time
+                                        md-tooltip ng-show="targetModel.selectedTargetEntity == null" 
+                                                    md-delay="1000" 
+                                                    md-direction="top"
+                                                    style="margin-top: 40px !important;">
+                                            Select Some target entity to enable this search field
+                                        </md-tooltip>
+
+                                        <md-button class="md-icon-button"
+                                                   ng-show="targetModel.selectedTargetEntity != undefined && (targetModel.selectedTargetEntity.entityType).includes('LITERAL')"
+                                                   ng-click="showResultsDialog($event, targetModel)"
+                                                   style="padding:0px; 
+                                                   margin:0px; 
+                                                   margin-bottom:25px; 
+                                                   display:inline-block;">
+                                            <md-icon md-font-icon="fa fa-search" style="font-size:24px"></md-icon>
+                                        </md-button> 
+                                        <md-tooltip
+                                            ng-show="targetModel.selectedTargetEntity != undefined && (targetModel.selectedTargetEntity.entityType).includes('LITERAL')"
+                                            md-delay="1500" md-direction="top"> Search for
+                                            specific instance of
+                                            "{{targetModel.selectedTargetEntity.name}}" entity </md-tooltip> <md-tooltip
+                                            ng-show="targetModel.selectedTargetEntity.name == '' || (targetModell.relatedEntitySearchText == '' && targetModel.relatedChips.length === 0)"
+                                            md-delay="1000" md-direction="top"> Enter some
+                                            keywords to enable search for this entity </md-tooltip-->
+																	<!-- 
+                                        Autocomplete with chip:
+                                        https://codepen.io/Rishii/pen/mPqazv
+                                        
+                                        -->	
+																</div>
+																<md-input-container style="margin:0; padding:2px; margin-top:20px">
+																	<label>From Date</label>
+																	<md-datepicker name="fromDateInput_{{rowModel.id}}" 
+                                                       ng-model="targetModel.rangeOfDates.from" 
+                                                       ng-show="targetModel.selectedTargetEntity != undefined && (targetModel.selectedTargetEntity.entityType).includes('TEMPORAL')"
+                                                       />         								
+																	<div ng-messages="searchForm['fromDateInput_' + rowModel.id].$error">
+																		<div ng-message="valid">Please enter some date</div>
+																	</div>
+																</md-input-container>
+																<md-input-container style="margin:0; padding:2px;" class="shrinked">
+																	<label>Until Date</label>
+																	<md-datepicker name="untilDateInput_{{rowModel.id}}" 
+                                                       ng-model="targetModel.rangeOfDates.until"
+                                                       ng-show="targetModel.selectedTargetEntity != undefined && (targetModel.selectedTargetEntity.entityType).includes('TEMPORAL')"
+                                                       />
+																	<div ng-messages="searchForm['untilDateInput_' + rowModel.id].$error">
+																		<div ng-message="valid">Please enter some date</div>
+																	</div>
+																</md-input-container>
+
+
+
+
+															</md-content>
+
+
+
+														</div>
+
+
+
+														<md-list flex>
+															<md-list-item ng-repeat="rowModel in rowModelList track by $index" 
+                                              ng-init="outerIndex = $index" 
+                                              style="padding:10px 0" 
+                                              class="showListItem">
+																<div layout="column" ng-include="'../aqub/views/rowTemplate.html'" onload="parent = $parent"/>
+																<!--
+                                    <row-template/>
+                                    -->
+															</md-list-item>
+														</md-list>
+
+													</section>
+
+												</span>
+
+												<span layout="row">
+													<md-button class="md-raised md-primary" 
+                                   ng-click="applySearch()"
+                                   ng-disabled="searchForm.$invalid">
+														<md-icon md-font-icon="fa fa-search" style="font-size:18px"/>
+                            Search
+													</md-button>
+													<span flex/>
+													<md-button class="md-raised md-accent" ng-click="applyReset($event)">
+														<md-icon md-font-icon="fa fa-dot-circle-o" style="font-size:18px"/>
+                            Reset
+													</md-button>
+
+												</span>
+
+												<!--
+                    <button ng-click="selectHats()">
+                            Select Hats
+                </button>
+                <button ng-click="deselectGel()">
+                            Deselect Gel ink
+                </button>
+                    -->
+
+											</form>
+										</md-content>
+
+										<!-- Displaying Results -->
+										<md-content>
+											<div style="padding-left:30px;" class="row" ng-show="finalResults.results.bindings.length > 0">
+
+												<!-- Displaying Selected Item -->
+												<md-sidenav class="md-sidenav-right"
+                                md-component-id="resultItemInfoSidenav"
+                                md-whiteframe="4"
+                                md-disable-backdrop="true"
+                                ng-class="resultsModel.selectedViewStyle.value">
+
+													<md-toolbar class="md-theme-indigo">
+														<div class="md-toolbar-tools">
+															<md-button class="md-icon-button" 
+                                           aria-label="Hide result item" 
+                                           ng-click="closeResultItemInfo();">
+																<md-icon md-font-icon="fa fa-chevron-circle-right" 
+                                             style="font-size:24px"/>
+																<md-tooltip md-delay="1000" 
+                                                md-direction="top">
+                                        Hide this sidenav
+																</md-tooltip>
+															</md-button>
+															<h2 class="md-flex">Information Card of {{currSelectedResultItem.title}}</h2>
+														</div>
+													</md-toolbar>
+
+													<md-content layout-padding>
+														<div ng-include="'views/info/selectedResultItemInfo.html'"/>
+														<md-button ng-click="closeResultItemInfo();" class="md-accent">
+                                Hide this sidenav
+														</md-button>
+													</md-content>
+
+												</md-sidenav>
+
+												<md-toolbar class="md-primary">
+													<div class="md-toolbar-tools">
+														<h2>Data Results</h2>
+														<span  style="font-size: 15px;" ng-show="!finalResultsMaxCountReached" class="text-right"
+                                   ng-class="activeRelatedSearchResultsStyle">
+                                &nbsp;({{finalResults.totalItems}} results)
+
+														</span>
+														<span style="font-size: 15px;" ng-show="finalResultsMaxCountReached" class="text-right"
+                                  ng-class="activeRelatedSearchResultsStyle">
+                                &nbsp;(Returned the first {{finalResults.totalItems}} results)
+
+														</span>
+														<span flex/>
+														<!--<md-menu md-position-mode="target-right target">
+                                <md-button ng-click="$mdMenu.open()" 
+                                           class="md-icon-button" 
+                                           style="margin-right:8px;"
+                                           aria-label="results view options">
+                                    <md-icon md-font-icon="fa fa-cogs" style="font-size:28px;">
+                                        <md-tooltip md-delay="1000" md-direction="top">
+                                            Choose observation view option
+                                        </md-tooltip>
+                                </md-button>
+                                <md-menu-content width="4" ng-mouseleave="$mdMenu.close()">
+                                    <md-menu-item ng-repeat="item in resultsModel.viewStyleOptions">
+                                        <md-button ng-click="setResultViewStyle(item)">
+                                            {{item.name}}
+                                        </md-button>
+                                    </md-menu-item>
+                                </md-menu-content>
+                            </md-menu>
+                            -->
+
+
+													</div>
+												</md-toolbar>
+
+												<!--comment : maybe should be changed to number of results-->
+												<!-- <div layout-padding>
+                            To resolve any of the <code style="color:#106CC8;background: rgba(0,0,0,0.065);">"{{targetModel.selectedTargetEntity.name}}"</code> 
+                            results listed below, please <code>click on the</code> respective <code>row</code>.
+                    </div> -->
+
+												<div>
+													<table border="1" class="table table-striped table-condensed table-hover scrollTable">
+														<thead>
+															<tr style="background-color: rgb(255,64,129);"  class="ng-scope">
+																<th  ng-repeat="item in finalResults.head"
+                                         style="text-align: center;"
+                                         ng-if="item.count > 0"
+                                         colspan="{{item.count}}">{{ item.name | uppercase}}</th>
+															</tr> 
+															<tr ng-repeat="item in finalResults.results.bindings|limitTo:1" class="ng-scope">
+
+																<!-- Show Name first 
+                                    <th ng-if="item.title != null" 
+                                            class="ng-binding" 
+                                            style="vertical-align:middle; padding:0px 5px;;">
+                                                    {{'title' | uppercase}} 
+                                    </th>
+                                    <th ng-if="item.name != null" 
+                                            class="ng-binding" 
+                                            style="vertical-align:middle; padding:0px 5px;;">
+                                                    {{'name' | uppercase}} 
+                                    </th>-->
+																<th ng-repeat="(key,val) in item" 
+                                        class="ng-binding"  
+                                        ng-if="val.type != 'uri'"                                        
+                                        style="vertical-align:middle; padding:0px 5px; text-align: center;">
+																	<span ng-if="rowModelList['0'].selectedRelation != undefined">{{key.substring(0, key.lastIndexOf('_')).split('_').join(' ') | uppercase}}</span>
+																	<span ng-if="rowModelList['0'].selectedRelation == undefined">{{key.split('_').join(' ') | uppercase}}</span>
+
+																	<!-- ng-if="key != 'isChecked' && key != 'uri' && key != 'title' && key != 'name'"-->
+																</th>
+															</tr>
+														</thead>
+														<tbody>
+															<!-- ng-class="{selected: entity.isChecked}" -->
+															<tr ng-repeat="item in finalResults.results.bindings" 
+                                    class="ng-scope">
+																<!-- Show Name first 
+                                    <td ng-if="item.title != null"  
+                                            class="ng-binding" 
+                                            style="vertical-align:middle; padding:0px 5px;;">
+                                            {{item.title.value}}
+                                    </td>
+                                    <td ng-if="item.name != null"  
+                                            class="ng-binding" 
+                                            style="vertical-align:middle; padding:0px 5px;">
+                                            {{item.name.value}}
+                                    </td>-->
+																<td  ng-repeat="obj in item"
+                                         class="ng-binding" 
+                                         style="vertical-align:middle; padding:0px 5px; text-align: center;">
+																	<span  ng-if="(val.uri.startsWith('http') || val.uri.startsWith('urn') )&& !isImage(val.value)"
+                                               title="{{val.uri}}" ng-click=" handleSelectedResultItem(item, val.uri, val.entityName, false, false)" ng-repeat="(key,val) in obj track by $index">{{val.value}}
+																		<span  ng-if="key < obj.length - 1">
+																					<hr style="margin-top:0px;margin-bottom:0px;" />
+																				</span>
+																			</span>	  
+																			<img src="/aqub/download/file/{{val.value}}"  ng-if="val.uri.startsWith('http') && isImage(val.value)"
+                                             title="{{val.uri}}" ng-click=" handleSelectedResultItem(item, val.uri, val.entityName, false, false)" ng-repeat="(key,val) in obj track by $index">
+																				<span  ng-if="key < obj.length - 1">
+																							<hr style="margin-top:0px;margin-bottom:0px;" />
+																						</span>
+																					</img>
+																					<span  ng-if="!(val.uri.startsWith('http'))  && !(val.uri.startsWith('urn'))"
+                                               title="{{val.uri}}"  ng-repeat="(key,val) in obj track by $index">{{val.value}}
+																						<span  ng-if="key < obj.length - 1">
+																									<hr style="margin-top:0px;margin-bottom:0px;" />
+																								</span>
+																							</span>	
+																						</td>
+																					</tr>
+																				</tbody>
+																			</table>
+																			<md-button style="margin-bottom: 20px;" class="md-raised md-primary" 
+                                   ng-click="downloadCSV()"
+                                   >
+																				<md-icon md-font-icon="fa fa-download" style="font-size:18px"/>
+                            Download CSV
+																			</md-button>
+
+																		</div>
+
+																		<div>
+																			<md-divider/>
+																			<div class="text-center">
+																				<ul uib-pagination items-per-page="itemsPerPage"
+                                total-items="finalResults.totalItems" 
+                                ng-model="currentPage"
+                                max-size="maxSize" 
+                                class="pagination-sm" 
+                                boundary-links="true"
+                                force-ellipses="true" 
+                                ng-change="getFinalReusltsForData();">
+																				</ul>
+																			</div>
+
+																		</div>
+																	</div>
+
+																	<div ng-show="finalResults.results.bindings.length < 1" 
+                     style="color:rgb(63,81,181); 
+                     font-size:20px;
+                     text-align: center;
+                     width: 100%;
+                     margin-top:20%;">
+                    I'm Sorry. No entries were found
+																			</div>
+
+																		</md-content>
+
+																	</div>
+
+																</div>
+
+															</div>

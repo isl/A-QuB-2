@@ -1,0 +1,58 @@
+.menu-list {
+	padding-left: 30px;
+	padding-top: 20px;
+}
+
+.home-section {
+	float: left;
+	width: 10%;
+}
+
+.section {
+	margin-left: 10%;
+	float: left;
+}
+
+.photo {
+	padding-right: 5px;
+}
+
+/*Fade animation for alert*/
+.fadeAlert.ng-enter, .fadeAlert.ng-leave {
+	-webkit-transition: 0.5s linear all;
+	transition: 0.5s linear all;
+}
+/*
+.fadeAlert.ng-enter, .fadeAlert.ng-leave.ng-leave-active {
+	opacity: 0;
+}*/
+
+.fadeAlert.ng-leave, .fadeAlert.ng-enter.ng-enter-active {
+	opacity: 1;
+}
+
+.scrollTable {
+	display: block;
+	overflow-x: auto;
+}
+
+.scrollTable tbody thead tfoot {
+	display: block;
+	width:1000px;
+}
+
+.scrollTable tfoot {
+	text-align: center;
+}
+
+.scrollTable tbody {
+	overflow-y: auto;
+}
+
+.ngClickPointer {
+	cursor: pointer;
+}
+/*
+.tooltip-custom {
+	font-size: 14px !important;
+}*/

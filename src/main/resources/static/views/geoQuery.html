@@ -1,0 +1,188 @@
+<div class="section" style="padding: 20px;" ngCloak>
+	
+	<div class="row">
+		<div class="column inside" style="width:100%">
+			
+			<md-toolbar class="md-primary">
+				<div class="md-toolbar-tools">
+					<h2 class="md-flex" flex>{{headingTitle}}</h2>
+					<md-button ng-click="toggleInfo()" class="md-fab md-mini" aria-label="Show Help">
+			            <md-icon md-svg-src="images/information-variant.svg"></md-icon>
+			        </md-button>
+				</div>
+			</md-toolbar>
+			
+			<md-content flex layout-padding>
+			
+				<form id="submitForm" class="ng-valid ng-dirty" role="form" ng-submit="submitAsyncQueryJSON()">
+					
+
+					<div class="form-group" style="margin: 0 auto;"><!-- width:90% -->
+						
+						<div layout-padding>
+							<p>
+								Please hold down <code>Ctrl + left mouse click</code> while selecting some area on the map.
+							</p>
+						</div>
+						
+						<div uib-alert ng-repeat="alert in alerts"
+							 ng-class="'alert-' + (alert.type || 'warning')" 
+							 class='fadeAlert'
+							 close="alerts.splice($index, 1);">
+							{{alert.msg}}
+						</div>
+						
+						<style>
+					      .ol-dragbox {
+					        background-color: rgba(255,255,255,0.4);
+					        border-color: rgba(100,150,0,1);
+					      }
+					    
+					    /*
+					    Overwritting CSS to provide scrollable pop-overflow
+					    */
+					    .popover-content {
+							max-height: 200px;
+							overflow-y: auto;
+						}
+					    </style>
+					    <!-- 
+					    Container of the pop-up. The width of the pop-up is also determined here, 
+						however the Bootstrapt pop-up itself has defined it's own max-width at 276px 
+					     -->
+					    <div id="popup" style="width:300px;"></div>
+						<div id="map" class="map"><div id="popup"></div></div>
+						<div>
+							<div style="display: inline-block; font-style:italic;">Coordinates of mouse position (display projection used is <code style="color:#106CC8;background: rgba(0,0,0,0.065);">'EPSG:4326'</code>): </div>
+							<div style="display: inline-block; font-style:italic;" id="mouse-position" flex></div>
+						</div>
+						<div id="info"></div>
+						
+
+						
+						<!--
+						Angular Coordinates: 
+						<div>
+							{{coordinatesRegion}}
+						
+						</div>
+						-->
+					</div>
+					
+				</form>
+			</md-content>
+			
+		</div>
+			
+		<md-sidenav class="md-sidenav-right" 
+					md-component-id="rightInfo"
+                	md-disable-backdrop 
+                	md-whiteframe="4"
+                	style="margin-top:30px;">
+
+			<md-toolbar class="md-accent">
+				<div class="md-toolbar-tools">
+					<md-button class="md-icon-button" aria-label="Hide Help" ng-click="toggleInfo()">
+          				<md-icon md-svg-src="images/chevron-right.svg" style="color: white;"></md-icon>
+        			</md-button>
+					<h2 class="md-flex">Information</h2>
+					<span flex></span>
+					<md-icon md-font-icon="mdi mdi-information-outline" style="font-size:25px;"></md-icon>
+				</div>
+			</md-toolbar>
+
+			<md-content layout-margin>
+				<p>
+					<div ng-include="'views/info/geoQueryInfo.html'"></div>
+				</p>
+					
+				<md-button ng-click="toggleInfo()" class="md-accent">
+					Close this Sidenav
+				</md-button>
+			</md-content>
+
+		</md-sidenav>
+				
+	</div>
+		
+	<!-- Results Table -->
+	<div ng-show="lastEndPointForm.totalItems>0" class="row">
+		<md-toolbar class="md-primary">
+			<div class="md-toolbar-tools">
+				<h2 class="md-flex">Data Results</h2>
+			</div>
+		</md-toolbar>
+		<div id="table_results">
+			<table class="table table-striped table-condensed table-hover scrollTable">
+				<thead>
+					<!-- (columnName, columnValue) corresponds to (key, val) for JSON object's key and value -->
+					<tr ng-repeat="item in endpointResult.results|limitTo:1" class="ng-scope">
+						<th ng-repeat="(columnName, columnValue) in item" 
+							ng-if="columnName!=='east' && columnName!=='west' && columnName!=='north' && columnName!=='south'" 
+							class="ng-binding">
+							{{columnName}} 
+						</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+						<td colspan="3">
+							<div class="text-center">
+								<ul uib-pagination items-per-page="itemsPerPage"
+									total-items="totalItems" 
+									ng-model="currentPage"
+									max-size="maxSize" 
+									class="pagination-sm" 
+									boundary-links="true"
+									force-ellipses="true" 
+									ng-change="pageChanged()">
+								</ul>
+
+							</div>
+						</td>
+					<tr>
+					<tr>
+						<td colspan="4">
+							<div class="text-right">
+								Number of Results: <b>{{lastEndPointForm.totalItems}}</b>
+							</div>
+						</td>
+					</tr>
+				</tfoot>
+				<tbody style="height: 150px;">
+					<!-- (columnName, columnValue) corresponds to (key, val) for JSON object's key and value -->
+					<tr ng-repeat="item in endpointResult.results" class="ng-scope">
+						<td ng-repeat="(columnName, columnValue) in item" 
+							ng-if="columnName!=='east' && columnName!=='west' && columnName!=='north' && columnName!=='south'"  
+							class="ng-binding">
+							
+							<span ng-if="columnValue.link === true">
+								<a ng-href="{{columnValue.uri}}" target="_blank">
+									{{columnValue.name}}
+								</a>
+							</span>
+							
+							<span>
+								<a ng-if="columnValue.link === undefined && columnValue.type==='uri'" ng-href="{{columnValue.value}}" target="_blank">
+									{{columnValue.value}}
+								</a>
+							</span>
+							
+							<span ng-if="columnValue.link === undefined && columnValue.type!=='uri'">
+								{{columnValue.value}}
+							</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+		</div>
+	</div>
+	
+	<div ng-show="lastEndPointForm.totalItems==0" class="row">
+		<div style="margin-top: -50px;padding-left: 40px;">
+			<h4>No entries were found</h4>
+		</div>
+	</div>
+		
+</div>
