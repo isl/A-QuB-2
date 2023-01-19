@@ -10,6 +10,7 @@ The supported functionalities include:
 * Results visualisation in table
 * Results browsing by exploiting the entity interconnections
 * Results download in CSV format for further (offline) analysis
+* Configuration for use over any KB through a properties file
 
 The system is an extension of a previous version (called A-QuB), described in the following demo paper:
 
@@ -23,6 +24,10 @@ The current version a) implements a configuration model that allows fully config
 - **AngularJS** - A structural framework for dynamic web apps based on HTML and JavaScript;
 - **Material Design & Bootstrap-UI** - UI component frameworks;
 - **H2** – A relational database management system written in Java, that can be embedded in Java applications;
+
+## Requirements ##
+
+- The application communicates with the knowledge base (RDF triplestore) through the API provided by [A-QuB-2 AccessServices](https://github.com/isl/A-QuB-2-AccessServices). The URL of this API is set in the configuration's property file. 
 
 ## Contact ##
 
