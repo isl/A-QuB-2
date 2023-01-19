@@ -1,15 +1,15 @@
-# A-QuB-2 | A Web Application for User-Friendly Semantic Data Querying and Exploration
+# A-QuB-2 | A Web Application for Querying and Exploring Semantic Data
 
 ## System Description ##
 
 A-QuB-2 is a web application that facilitates the exploration of semantic (RDF) data by plain users. It offers a user-friendly interface that supports users in building and running complex queries step-by-step, without needing to know and write SPARQL. Its configuration model allows setting up the application for use over any knowledge base, independent of the underlying data model / ontology. 
 
 The supported functionalities include:
-* Assistive query building interface that exploits the (pre-configured) relationships among the involved entities
+* Assistive query building interface that exploits the connections of the KB entities
 * Data filtering based on entity, text, number range, date range, boolean value, map area 
 * Results visualisation in table
 * Results browsing by exploiting the entity interconnections
-* Results download in CSV format for furthe (offline) analysis
+* Results download in CSV format for further (offline) analysis
 
 The system is an extension of a previous version (called A-QuB), described in the following demo paper:
 
@@ -31,6 +31,6 @@ The current version a) implements a configuration model that allows fully config
 
 ## Acknowledgements ##
 
-The current version of this work has received funding from the European Union's Horizon 2020 research and innovation programme under the Marie Sklodowska-Curie grant agreement No 890861 ([Project ReKnow](https://reknow.ics.forth.gr/)).
+The work has received funding from the European Union's Horizon 2020 research and innovation programme under the Marie Sklodowska-Curie grant agreement No 890861 ([Project ReKnow](https://reknow.ics.forth.gr/)).
 
 The previous version of this work was carried out within the H2020 project [VRE4EIC](https://cordis.europa.eu/project/id/676247) (No 676247). 
