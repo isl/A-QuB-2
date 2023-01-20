@@ -25,9 +25,20 @@ The current version a) implements a configuration model that allows fully config
 - **Material Design & Bootstrap-UI** - UI component frameworks;
 - **H2** – A relational database management system written in Java, that can be embedded in Java applications;
 
+
 ## Requirements ##
 
 - The application communicates with the knowledge base (RDF triplestore) through the API provided by [A-QuB AccessServices](https://github.com/isl/A-QuB-2-AccessServices). The URL of this API is set in the configuration's property file. 
+
+
+## Installation Instructions ##
+
+1. Create the H2 database by running the java command: <br/>>> java H2Manager.java
+2. Prepare an initial configuration by editing the file 'config.properties' (instructions inside the file)
+3. The JAR can be created by running the maven command: <br/>>> mvn package
+4. The JAR is executed by running the Java command: <br/>>> java -jar <Name_Of_The_JAR.jar><br/> 
+   The port to be used can be defined by using the argument 'server.port', for example: <br/>>> java -jar <Name_Of_The_JAR.jar> --server.port=8099
+
 
 ## Contact ##
 
