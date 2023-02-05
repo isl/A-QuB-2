@@ -16,7 +16,7 @@ The system is an extension of a previous version (called A-QuB), described in th
 
 V. Kritsotakis, Y. Roussakis, T. Patkos, M. Theodoridou, *"Assistive Query Building for Semantic Data."* In SEMANTICS Posters&Demos. 2018 ([PDF](https://ceur-ws.org/Vol-2198/paper_107.pdf)).
 
-The current version a) implements a configuration model that allows fully configuring the application through a properties file, b) has been extended for supporting additional functionalities, such as filtering  by number range, boolean value, date range (including expressions like '20th century', 'decade of 1970', etc.), and others.
+The current version a) implements a configuration model that allows fully configuring the application through a properties file, b) realizes complex JOIN mechanisms on dynamically-defined paths connecting pairs of entities, c) has been extended for supporting additional functionalities, such as filtering  by number range, boolean value, date range (including expressions like '20th century', 'decade of 1970', etc.), and others.
 
 ## Technologies Used
 
